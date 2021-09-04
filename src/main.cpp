@@ -15,14 +15,21 @@ int main(int argc, char* argv[]) {
 
 	RenderWindow window("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	bool game_running = true;
+	bool quit = false;
 
 	SDL_Event event;
 
-	while (game_running) {
+	while (!quit) {
 		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT)
-				game_running = false;
+			switch(event.type) {
+				case SDL_QUIT:
+					quit = true;
+					break;
+				case SDL_KEYDOWN:
+					switch(event.key.keysym.sym) {
+					}
+				break;
+			}
 		}
 		window.renderRect(255, 255, 255);
 		window.display();
