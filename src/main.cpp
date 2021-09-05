@@ -19,6 +19,11 @@ int main(int argc, char* argv[]) {
 
 	SDL_Event event;
 
+	//attempt feebly to get rid of white flash on load
+	window.clear();
+	window.display();
+	window.showWindow();
+
 	while (!quit) {
 		while (SDL_PollEvent(&event)) {
 			switch(event.type) {
