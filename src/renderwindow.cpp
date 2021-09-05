@@ -41,18 +41,14 @@ void RenderWindow::render(const Entity& entity) const {
 	SDL_Rect src; 
 	src.x = entity.getCurrentFrame().x;
 	src.y = entity.getCurrentFrame().y;
-	//src.w = entity.getCurrentFrame().w;
-	//src.h = entity.getCurrentFrame().h;
-	src.w = 640;
-	src.h = 480;
+	src.w = entity.getCurrentFrame().w;
+	src.h = entity.getCurrentFrame().h;
 
 	SDL_Rect dst;
 	dst.x = entity.getPos().x;
 	dst.y = entity.getPos().y;
-	//dst.w = entity.getCurrentFrame().w;
-	//dst.h = entity.getCurrentFrame().h;
-	dst.w = 32;
-	dst.h = 32;
+	dst.w = entity.getCurrentFrame().w;
+	dst.h = entity.getCurrentFrame().h;
 
 	SDL_RenderCopy(renderer_, const_cast<SDL_Texture*>(entity.getTex()), &src, &dst);
 }

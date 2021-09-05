@@ -2,12 +2,9 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
-Entity::Entity(Vector2f pos, SDL_Texture* tex)
-:pos_(pos), tex_(tex), currentFrame_({0, 0, 32, 32}) {
-	currentFrame_.x = 0;
-	currentFrame_.y = 0;
-	currentFrame_.w = 32;
-	currentFrame_.h = 32;
+Entity::Entity(Vector2f pos, SDL_Texture* tex, SDL_Rect frame)
+:pos_(pos), tex_(tex), currentFrame_(frame) {
+
 }
 
 const Vector2f& Entity::getPos() const {

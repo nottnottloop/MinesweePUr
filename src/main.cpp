@@ -15,6 +15,10 @@ int main(int argc, char* argv[]) {
 
 	RenderWindow window("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	SDL_Texture* bg = window.loadTexture("res/bg.png");
+	SDL_Texture* fg = window.loadTexture("res/fg.png");
+
+	Entity entity({50, 50}, bg, {0, 0, 128, 64});
 	bool quit = false;
 
 	SDL_Event event;
@@ -36,7 +40,7 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
-		window.renderRect(255, 255, 255);
+		window.render(entity);
 		window.display();
 		window.clear();
 		window.showWindow();
