@@ -22,3 +22,10 @@ void Entity::setTex(SDL_Texture* tex) {
 SDL_Rect Entity::getCurrentFrame() const {
 	return current_frame_;
 }
+
+void Entity::setCurrentFrame(SDL_Rect rect) {
+	current_frame_.x = rect.x;
+	current_frame_.y = rect.y;
+	current_frame_.w = rect.w;
+	current_frame_.h = rect.h;
+}

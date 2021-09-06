@@ -11,6 +11,7 @@ public:
 	SDL_Texture* getTex() const;
 	void setTex(SDL_Texture* tex);
 	SDL_Rect getCurrentFrame() const;
+	void setCurrentFrame(SDL_Rect rect);
 protected:
 	Vector2f pos_;
 	SDL_Texture* tex_;
