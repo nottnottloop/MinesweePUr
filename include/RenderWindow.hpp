@@ -10,7 +10,7 @@ public:
 	RenderWindow(const char* title, int w, int h);
 	SDL_Texture* loadTexture(const char* file_path);
 	void cleanUp();
-	void clear();
+	void clear(int r = 0, int g = 0, int b = 0, int a = 0xFF);
 	void render(const Entity& entity, double scale = 1) const;
 	void display() const;
 	void showWindow();

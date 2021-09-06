@@ -32,8 +32,8 @@ void RenderWindow::cleanUp() {
 	SDL_DestroyWindow(window_);
 }
 
-void RenderWindow::clear() {
-	SDL_SetRenderDrawColor( renderer_, 0, 0, 0, 0xFF );        
+void RenderWindow::clear(int r, int g, int b, int a) {
+	SDL_SetRenderDrawColor( renderer_, r, g, b, a );        
 	SDL_RenderClear(renderer_);
 }
 
