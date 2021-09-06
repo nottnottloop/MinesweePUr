@@ -9,7 +9,7 @@ public:
 	Entity(Vector2f p_pos, SDL_Texture* p_tex, SDL_Rect frame);
 	Vector2f getPos() const;
 	SDL_Texture* getTex() const;
-	void setTex();
+	void setTex(SDL_Texture* tex);
 	SDL_Rect getCurrentFrame() const;
 protected:
 	Vector2f pos_;
