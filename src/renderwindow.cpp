@@ -37,7 +37,7 @@ void RenderWindow::clear() {
 	SDL_RenderClear(renderer_);
 }
 
-void RenderWindow::render(const Entity& entity) const {
+void RenderWindow::render(const Entity& entity, int scale) const {
 	SDL_Rect src; 
 	src.x = entity.getCurrentFrame().x;
 	src.y = entity.getCurrentFrame().y;
@@ -47,8 +47,8 @@ void RenderWindow::render(const Entity& entity) const {
 	SDL_Rect dst;
 	dst.x = entity.getPos().x;
 	dst.y = entity.getPos().y;
-	dst.w = entity.getCurrentFrame().w;
-	dst.h = entity.getCurrentFrame().h;
+	dst.w = entity.getCurrentFrame().w * scale;
+	dst.h = entity.getCurrentFrame().h * scale;
 
 	SDL_RenderCopy(renderer_, const_cast<SDL_Texture*>(entity.getTex()), &src, &dst);
 }

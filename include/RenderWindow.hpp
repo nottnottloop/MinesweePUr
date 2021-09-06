@@ -11,7 +11,7 @@ public:
 	SDL_Texture* loadTexture(const char* file_path);
 	void cleanUp();
 	void clear();
-	void render(const Entity& entity) const;
+	void render(const Entity& entity, int scale = 1) const;
 	void display() const;
 	void showWindow();
 	void renderRect(int r, int g, int b);
