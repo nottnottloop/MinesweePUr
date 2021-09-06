@@ -4,7 +4,7 @@
 #include "Entity.hpp"
 
 Entity::Entity(Vector2f pos, SDL_Rect frame, SDL_Texture* bg, SDL_Texture* fg)
-:pos_(pos), current_frame_(frame), tex_(bg), fg_tex_(fg), scale_(1) {
+:pos_(pos), current_frame_(frame), bg_tex_(bg), fg_tex_(fg), scale_(1) {
 
 }
 
@@ -12,12 +12,20 @@ Vector2f Entity::getPos() const {
 	return pos_;
 }
 
-SDL_Texture* Entity::getTex() const {
-	return tex_;
+SDL_Texture* Entity::getBgTex() const {
+	return bg_tex_;
 }
 
-void Entity::setTex(SDL_Texture* tex) {
-	tex_ = tex;
+void Entity::setBgTex(SDL_Texture* tex) {
+	bg_tex_ = tex;
+}
+
+SDL_Texture* Entity::getFgTex() const {
+	return fg_tex_;
+}
+
+void Entity::setFgTex(SDL_Texture* tex) {
+	fg_tex_ = tex;
 }
 
 SDL_Rect Entity::getCurrentFrame() const {

@@ -29,9 +29,17 @@ int main(int argc, char* argv[]) {
 		cells[i].reserve(8);
 	}
 
-	//Cell entity({50, 50}, bg, {0, 0, 64, 64});
-	bool quit = false;
+	constexpr float CELL_SCALE = 0.5f;
+	constexpr float CENTER_X = (SCREEN_WIDTH / 2) - 64.0f * CELL_SCALE * 4;
+	constexpr float CENTER_Y = (SCREEN_HEIGHT / 2) - 64.0f * CELL_SCALE * 4;
+	for (int i = 0; i < 8; ++i) {
+		for (int j = 0; j < 8; ++j) {
+			cells[i].push_back(Cell({CENTER_X + 64.0f * CELL_SCALE * j, CENTER_Y + 64.0f * CELL_SCALE * i}, {0, 0, 64, 64}, bg, fg));
+			cells[i][j].setScale(CELL_SCALE);
+		}
+	}
 
+	bool quit = false;
 	SDL_Event event;
 
 	//attempt feebly to get rid of white flash on load
@@ -51,7 +59,11 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
-		//window.render(entity.renderRectInfo(), 1, bg, fg);
+		for (int i = 0; i < 8; ++i) {
+			for (int j = 0; j < 8; ++j) {
+				window.render(cells[i][j].renderRectInfo(), cells[i][j].getBgTex(), cells[i][j].getFgTex());
+			}
+		}
 		window.display();
 		//color used is just a random sequence of numbers that I got lucky with
 		window.clear(12, 67, 114);
