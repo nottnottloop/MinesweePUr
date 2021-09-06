@@ -14,5 +14,5 @@ public:
 protected:
 	Vector2f pos_;
 	SDL_Texture* tex_;
-	SDL_Rect currentFrame_;
+	SDL_Rect current_frame_;
 };

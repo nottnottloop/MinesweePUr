@@ -6,5 +6,6 @@
 class Cell : public Entity {
 public:
 	Cell(Vector2f pos, SDL_Texture* tex, SDL_Rect frame);
-
+private:
+	SDL_Texture* foreground_texture
 };

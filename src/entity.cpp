@@ -3,7 +3,7 @@
 #include "Entity.hpp"
 
 Entity::Entity(Vector2f pos, SDL_Texture* tex, SDL_Rect frame)
-:pos_(pos), tex_(tex), currentFrame_(frame) {
+:pos_(pos), tex_(tex), current_frame_(frame) {
 
 }
 
@@ -20,5 +20,5 @@ void Entity::setTex(SDL_Texture* tex) {
 }
 
 SDL_Rect Entity::getCurrentFrame() const {
-	return currentFrame_;
+	return current_frame_;
 }
