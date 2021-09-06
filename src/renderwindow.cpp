@@ -1,8 +1,9 @@
-#include "RenderWindow.hpp"
-#include "Constants.hpp"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
+#include <tuple>
+#include "RenderWindow.hpp"
+#include "Constants.hpp"
 
 RenderWindow::RenderWindow(const char* p_title, const int p_w, const int p_h)
 	:window_(NULL), renderer_(NULL) {
@@ -37,20 +38,8 @@ void RenderWindow::clear(int r, int g, int b, int a) {
 	SDL_RenderClear(renderer_);
 }
 
-void RenderWindow::render(const Entity& entity, double scale) const {
-	SDL_Rect src; 
-	src.x = entity.getCurrentFrame().x;
-	src.y = entity.getCurrentFrame().y;
-	src.w = entity.getCurrentFrame().w;
-	src.h = entity.getCurrentFrame().h;
-
-	SDL_Rect dst;
-	dst.x = entity.getPos().x;
-	dst.y = entity.getPos().y;
-	dst.w = entity.getCurrentFrame().w * scale;
-	dst.h = entity.getCurrentFrame().h * scale;
-
-	SDL_RenderCopy(renderer_, entity.getTex(), &src, &dst);
+void RenderWindow::render(std::tuple<SDL_Rect, SDL_Rect> rects, double scale, SDL_Texture* bg_tex, SDL_Texture* fg_tex) const {
+	SDL_RenderCopy(renderer_, bg_tex, &std::get<0>(rects), &std::get<1>(rects));
 }
 
 void RenderWindow::display() const {

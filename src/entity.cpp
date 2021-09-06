@@ -1,9 +1,10 @@
 #include <SDL.h>
 #include <SDL_image.h>
+#include <tuple>
 #include "Entity.hpp"
 
 Entity::Entity(Vector2f pos, SDL_Texture* tex, SDL_Rect frame)
-:pos_(pos), tex_(tex), current_frame_(frame) {
+:pos_(pos), tex_(tex), current_frame_(frame), fg_tex_(nullptr), fg_frame_({0, 0, 0, 0}), scale_(1) {
 
 }
 
@@ -28,4 +29,23 @@ void Entity::setCurrentFrame(SDL_Rect rect) {
 	current_frame_.y = rect.y;
 	current_frame_.w = rect.w;
 	current_frame_.h = rect.h;
+}
+
+void Entity::setScale(double scale) {
+	scale_ = scale;
+}
+
+double Entity::getScale() {
+	return scale_;
+}
+
+std::tuple<SDL_Rect, SDL_Rect> Entity::renderRectInfo() {
+	SDL_Rect src = getCurrentFrame(); 
+
+	SDL_Rect dst;
+	dst.x = getPos().x;
+	dst.y = getPos().y;
+	dst.w = getCurrentFrame().w * getScale();
+	dst.h = getCurrentFrame().h * getScale();
+	return {src, dst};
 }

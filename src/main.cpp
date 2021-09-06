@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
 	SDL_Texture* bg = window.loadTexture("res/bg.png");
 	SDL_Texture* fg = window.loadTexture("res/fg.png");
 
-	Cell entity({50, 50}, bg, {0, 0, 128, 64}, fg);
+	Cell entity({50, 50}, bg, {0, 0, 128, 64});
 	bool quit = false;
 
 	SDL_Event event;
@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
-		window.render(entity, 0.5);
+		window.render(entity.renderRectInfo(), 1, bg, fg);
 		window.display();
 		//color used is just a random sequence of numbers that I got lucky with
 		window.clear(12, 67, 114);
