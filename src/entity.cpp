@@ -7,14 +7,16 @@ Entity::Entity(Vector2f pos, SDL_Texture* tex, SDL_Rect frame)
 
 }
 
-const Vector2f& Entity::getPos() const {
+Vector2f Entity::getPos() const {
 	return pos_;
 }
 
-const SDL_Texture* Entity::getTex() const {
+SDL_Texture* Entity::getTex() const {
 	return tex_;
 }
 
-const SDL_Rect Entity::getCurrentFrame() const {
+
+
+SDL_Rect Entity::getCurrentFrame() const {
 	return currentFrame_;
 }
