@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
 	SDL_Texture* bg = window.loadTexture("res/bg.png");
 	SDL_Texture* fg = window.loadTexture("res/fg.png");
 
-	Cell entity({50, 50}, bg, {0, 0, 128, 64});
+	Cell entity({50, 50}, bg, {0, 0, 128, 64}, fg);
 	bool quit = false;
 
 	SDL_Event event;
