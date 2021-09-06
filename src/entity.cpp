@@ -1,6 +1,6 @@
-#include "Entity.hpp"
 #include <SDL.h>
 #include <SDL_image.h>
+#include "Entity.hpp"
 
 Entity::Entity(Vector2f pos, SDL_Texture* tex, SDL_Rect frame)
 :pos_(pos), tex_(tex), currentFrame_(frame) {

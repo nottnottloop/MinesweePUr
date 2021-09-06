@@ -10,7 +10,7 @@ public:
 	const Vector2f& getPos() const;
 	const SDL_Texture* getTex() const;
 	const SDL_Rect getCurrentFrame() const;
-private:
+protected:
 	Vector2f pos_;
 	SDL_Texture* tex_;
 	SDL_Rect currentFrame_;
