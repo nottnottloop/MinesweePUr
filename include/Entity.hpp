@@ -6,7 +6,7 @@
 
 class Entity {
 public:
-	Entity(Vector2f p_pos, SDL_Texture* p_tex, SDL_Rect frame);
+	Entity(Vector2f pos, SDL_Texture* tex, SDL_Rect frame);
 	Vector2f getPos() const;
 	SDL_Texture* getTex() const;
 	void setTex(SDL_Texture* tex);
