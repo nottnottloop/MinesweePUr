@@ -2,6 +2,7 @@
 #include <SDL_image.h>
 #include <iostream>
 #include <vector>
+#include <array>
 
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
@@ -20,7 +21,15 @@ int main(int argc, char* argv[]) {
 	SDL_Texture* bg = window.loadTexture("res/bg.png");
 	SDL_Texture* fg = window.loadTexture("res/fg.png");
 
-	Cell entity({50, 50}, bg, {0, 0, 128, 64});
+	std::vector<std::vector<Cell>> cells;
+
+	//premature optimisation is the root of all fun
+	cells.resize(8);
+	for (int i = 0; i < 8; ++i) {
+		cells[i].reserve(8);
+	}
+
+	//Cell entity({50, 50}, bg, {0, 0, 64, 64});
 	bool quit = false;
 
 	SDL_Event event;
@@ -42,7 +51,7 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
-		window.render(entity.renderRectInfo(), 1, bg, fg);
+		//window.render(entity.renderRectInfo(), 1, bg, fg);
 		window.display();
 		//color used is just a random sequence of numbers that I got lucky with
 		window.clear(12, 67, 114);

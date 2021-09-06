@@ -6,8 +6,9 @@
 
 class Cell : public Entity {
 public:
-	Cell(Vector2f pos, SDL_Texture* tex, SDL_Rect frame);
+	Cell(Vector2f pos, SDL_Rect frame, SDL_Texture* bg, SDL_Texture* fg) : Entity(pos, frame, bg, fg) {};
 	void changeValue(value foreground);
+	value getValue();
 private:
 	value cell_value_;
 	bool clicked_;
