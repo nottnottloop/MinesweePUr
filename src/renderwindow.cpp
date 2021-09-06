@@ -37,7 +37,7 @@ void RenderWindow::clear() {
 	SDL_RenderClear(renderer_);
 }
 
-void RenderWindow::render(const Entity& entity, int scale) const {
+void RenderWindow::render(const Entity& entity, double scale) const {
 	SDL_Rect src; 
 	src.x = entity.getCurrentFrame().x;
 	src.y = entity.getCurrentFrame().y;

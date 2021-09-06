@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
-		window.render(entity);
+		window.render(entity, 0.5);
 		window.display();
 		window.clear();
 		window.showWindow();
