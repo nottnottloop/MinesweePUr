@@ -50,7 +50,7 @@ void RenderWindow::render(const Entity& entity, double scale) const {
 	dst.w = entity.getCurrentFrame().w * scale;
 	dst.h = entity.getCurrentFrame().h * scale;
 
-	SDL_RenderCopy(renderer_, const_cast<SDL_Texture*>(entity.getTex()), &src, &dst);
+	SDL_RenderCopy(renderer_, entity.getTex(), &src, &dst);
 }
 
 void RenderWindow::display() const {

@@ -2,7 +2,7 @@
 constexpr int SCREEN_WIDTH = 640;
 constexpr int SCREEN_HEIGHT = 480;
 
-enum class fg {
+enum class value {
 	ONE,
 	TWO,
 	THREE,
@@ -11,6 +11,5 @@ enum class fg {
 	SIX,
 	SEVEN,
 	EIGHT,
-	FLAG,
 	MINE
 };

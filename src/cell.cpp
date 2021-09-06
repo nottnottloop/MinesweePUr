@@ -6,6 +6,6 @@ Cell::Cell(Vector2f pos, SDL_Texture* tex, SDL_Rect frame, SDL_Texture* fg_tex)
 
 }
 
-void Cell::changeFg(fg) {
-	
+void Cell::changeValue(value foreground) {
+	cell_value_ = foreground;
 }

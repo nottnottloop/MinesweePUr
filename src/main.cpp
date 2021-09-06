@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
 		}
 		window.render(entity, 0.5);
 		window.display();
-		//color used is just a random sequence of numbers
+		//color used is just a random sequence of numbers that I got lucky with
 		window.clear(12, 67, 114);
 		window.showWindow();
 	}
