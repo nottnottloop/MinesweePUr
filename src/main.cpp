@@ -47,17 +47,38 @@ int main(int argc, char* argv[]) {
 	window.clear();
 	window.display();
 	window.showWindow();
-int rainbow_start[8][8] =
-{
-	{0, 1, 2, 3, 4, 5, 6, 7},
-	{1, 2, 3, 4, 5, 6, 7, 8},
-	{2, 3, 4, 5, 6, 7, 8, 9},
-	{3, 4, 5, 6, 7, 8, 9, 0},
-	{4, 5, 6, 7, 8, 9, 0, 1},
-	{5, 6, 7, 8, 9, 0, 1, 2},
-	{6, 7, 8, 9, 0, 1, 2, 3},
-	{7, 8, 9, 0, 1, 2, 3, 4}
-};
+	
+	//all of this code is overengineered for fun/no reason
+	int rainbow_start[8][8] = {0};
+	for (int i = 0; i < 8; ++i) {
+		rainbow_start[0][i] = i;
+	}
+	for (int i = 1; i < 8; ++i) {
+		for (int j = 0; j < 8; ++j) {
+			rainbow_start[i][j] = rainbow_start[i - 1][j] + 1;
+		}
+	}
+	for (int i = 1; i < 8; ++i) {
+		for (int j = 0; j < 8; ++j) {
+			if (rainbow_start[i][j] > 9) {
+				int diff = rainbow_start[i][j] - 10;
+				rainbow_start[i][j] = diff;
+			}
+		}
+	}
+
+	//this is the sane way of doing this
+	//int rainbow_start[8][8] = 
+	//{
+	//	{0, 1, 2, 3, 4, 5, 6, 7},
+	//	{1, 2, 3, 4, 5, 6, 7, 8},
+	//	{2, 3, 4, 5, 6, 7, 8, 9},
+	//	{3, 4, 5, 6, 7, 8, 9, 0},
+	//	{4, 5, 6, 7, 8, 9, 0, 1},
+	//	{5, 6, 7, 8, 9, 0, 1, 2},
+	//	{6, 7, 8, 9, 0, 1, 2, 3},
+	//	{7, 8, 9, 0, 1, 2, 3, 4}
+	//};
 
 	while (!quit) {
 		while (SDL_PollEvent(&event)) {
@@ -78,7 +99,7 @@ int rainbow_start[8][8] =
 				window.render(cells[i][j].renderBgRectInfo(), cells[i][j].getBgTex());
 				if (cells[i][j].shown()) {
 					cells[i][j].changeCellValue(static_cast<value>(rainbow_start[i][j]));
-					rainbow_start[i][j]--;
+					--rainbow_start[i][j];
 					if (rainbow_start[i][j] < 0) {
 						rainbow_start[i][j] = 9;
 					}
