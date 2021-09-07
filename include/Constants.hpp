@@ -9,6 +9,10 @@ constexpr int CLEAR_G = 67;
 constexpr int CLEAR_B = 114;
 constexpr int CLEAR_A = 0xFF;
 
+constexpr float CELL_SCALE = 0.8f;
+constexpr float CENTER_X = (SCREEN_WIDTH / 2) - 64.0f * CELL_SCALE * 4;
+constexpr float CENTER_Y = (SCREEN_HEIGHT / 2) - 64.0f * CELL_SCALE * 4;
+
 enum class value {
 	ONE,
 	TWO,

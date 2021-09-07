@@ -8,6 +8,7 @@
 #include "Entity.hpp"
 #include "Cell.hpp"
 #include "Constants.hpp"
+#include "Game.hpp"
 
 int main(int argc, char* argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
@@ -21,24 +22,7 @@ int main(int argc, char* argv[]) {
 	SDL_Texture* bg = window.loadTexture("res/bg.png");
 	SDL_Texture* fg = window.loadTexture("res/fg.png");
 
-	std::vector<std::vector<Cell>> cells;
-
-	//premature optimisation is the root of all fun
-	//code below heavily assumes an 8x8 board
-	cells.resize(8);
-	for (int i = 0; i < 8; ++i) {
-		cells[i].reserve(8);
-	}
-
-	constexpr float CELL_SCALE = 0.7f;
-	constexpr float CENTER_X = (SCREEN_WIDTH / 2) - 64.0f * CELL_SCALE * 4;
-	constexpr float CENTER_Y = (SCREEN_HEIGHT / 2) - 64.0f * CELL_SCALE * 4;
-	for (int i = 0; i < 8; ++i) {
-		for (int j = 0; j < 8; ++j) {
-			cells[i].push_back(Cell({CENTER_X + 64.0f * CELL_SCALE * j, CENTER_Y + 64.0f * CELL_SCALE * i}, {0, 0, 64, 64}, {0, 0, 64, 64}, bg, fg));
-			cells[i][j].setScale(CELL_SCALE);
-		}
-	}
+	Game game(bg, fg);
 
 	bool quit = false;
 	SDL_Event event;
@@ -60,12 +44,12 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
-		cells[0][0].changeCellValue(value::THREE);
+		game.cell(0, 0).changeCellValue(value::THREE);
 		for (int i = 0; i < 8; ++i) {
 			for (int j = 0; j < 8; ++j) {
-				window.render(cells[i][j].renderBgRectInfo(), cells[i][j].getBgTex());
-				if (cells[i][j].shown()) {
-					window.render(cells[i][j].renderFgRectInfo(), cells[i][j].getFgTex());
+				window.render(game.cell(i, j).renderBgRectInfo(), game.cell(i, j).getBgTex());
+				if (game.cell(i, j).shown()) {
+					window.render(game.cell(i, j).renderFgRectInfo(), game.cell(i, j).getFgTex());
 				}
 			}
 		}
