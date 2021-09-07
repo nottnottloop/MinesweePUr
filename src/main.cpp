@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
 		cells[i].reserve(8);
 	}
 
-	constexpr float CELL_SCALE = 0.9f;
+	constexpr float CELL_SCALE = 0.7f;
 	constexpr float CENTER_X = (SCREEN_WIDTH / 2) - 64.0f * CELL_SCALE * 4;
 	constexpr float CENTER_Y = (SCREEN_HEIGHT / 2) - 64.0f * CELL_SCALE * 4;
 	for (int i = 0; i < 8; i++) {
@@ -88,8 +88,8 @@ int rainbow_start[8][8] =
 		}
 		window.display();
 		//color used is just a random sequence of numbers that I got lucky with
-		window.clear(12, 67, 114);
 		SDL_Delay(500);
+		window.clear();
 		window.showWindow();
 	}
 

@@ -4,6 +4,7 @@
 #include <tuple>
 
 #include "Entity.hpp"
+#include "Constants.hpp"
 
 class RenderWindow 
 {
@@ -11,7 +12,7 @@ public:
 	RenderWindow(const char* title, int w, int h);
 	SDL_Texture* loadTexture(const char* file_path);
 	void cleanUp();
-	void clear(int r = 0, int g = 0, int b = 0, int a = 0xFF);
+	void clear(int r = CLEAR_R, int g = CLEAR_G, int b = CLEAR_B, int a = CLEAR_A);
 	void render(std::tuple<SDL_Rect, SDL_Rect> rects, SDL_Texture* tex) const;
 	void display() const;
 	void showWindow();
