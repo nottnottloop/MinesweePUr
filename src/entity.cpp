@@ -3,8 +3,8 @@
 #include <tuple>
 #include "Entity.hpp"
 
-Entity::Entity(Vector2f pos, SDL_Rect frame, SDL_Texture* bg, SDL_Texture* fg)
-:pos_(pos), current_frame_(frame), bg_tex_(bg), fg_tex_(fg), scale_(1) {
+Entity::Entity(Vector2f pos, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg)
+:pos_(pos), bg_frame_(bg_frame), fg_frame_(fg_frame), bg_tex_(bg), fg_tex_(fg), scale_(1) {
 
 }
 
@@ -28,15 +28,26 @@ void Entity::setFgTex(SDL_Texture* tex) {
 	fg_tex_ = tex;
 }
 
-SDL_Rect Entity::getCurrentFrame() const {
-	return current_frame_;
+SDL_Rect Entity::getBgFrame() const {
+	return bg_frame_;
 }
 
-void Entity::setCurrentFrame(SDL_Rect rect) {
-	current_frame_.x = rect.x;
-	current_frame_.y = rect.y;
-	current_frame_.w = rect.w;
-	current_frame_.h = rect.h;
+void Entity::setBgFrame(SDL_Rect rect) {
+	bg_frame_.x = rect.x;
+	bg_frame_.y = rect.y;
+	bg_frame_.w = rect.w;
+	bg_frame_.h = rect.h;
+}
+
+SDL_Rect Entity::getFgFrame() const {
+	return fg_frame_;
+}
+
+void Entity::setFgFrame(SDL_Rect rect) {
+	fg_frame_.x = rect.x;
+	fg_frame_.y = rect.y;
+	fg_frame_.w = rect.w;
+	fg_frame_.h = rect.h;
 }
 
 void Entity::setScale(double scale) {
@@ -47,13 +58,24 @@ double Entity::getScale() {
 	return scale_;
 }
 
-std::tuple<SDL_Rect, SDL_Rect> Entity::renderRectInfo() {
-	SDL_Rect src = getCurrentFrame(); 
+std::tuple<SDL_Rect, SDL_Rect> Entity::renderBgRectInfo() {
+	SDL_Rect src = getBgFrame(); 
 
 	SDL_Rect dst;
 	dst.x = getPos().x;
 	dst.y = getPos().y;
-	dst.w = getCurrentFrame().w * getScale();
-	dst.h = getCurrentFrame().h * getScale();
+	dst.w = getBgFrame().w * getScale();
+	dst.h = getBgFrame().h * getScale();
+	return {src, dst};
+}
+
+std::tuple<SDL_Rect, SDL_Rect> Entity::renderFgRectInfo() {
+	SDL_Rect src = getFgFrame(); 
+
+	SDL_Rect dst;
+	dst.x = getPos().x;
+	dst.y = getPos().y;
+	dst.w = getBgFrame().w * getScale();
+	dst.h = getBgFrame().h * getScale();
 	return {src, dst};
 }

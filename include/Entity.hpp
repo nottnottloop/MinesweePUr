@@ -7,7 +7,7 @@
 
 class Entity {
 public:
-	Entity(Vector2f pos, SDL_Rect frame, SDL_Texture* bg, SDL_Texture* fg);
+	Entity(Vector2f pos, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg);
 	Vector2f getPos() const;
 
 	SDL_Texture* getBgTex() const;
@@ -15,16 +15,19 @@ public:
 	SDL_Texture* getFgTex() const;
 	void setFgTex(SDL_Texture* tex);
 
-	SDL_Rect getCurrentFrame() const;
-	void setCurrentFrame(SDL_Rect rect);
+	SDL_Rect getBgFrame() const;
+	void setBgFrame(SDL_Rect rect);
+	SDL_Rect getFgFrame() const;
+	void setFgFrame(SDL_Rect rect);
 
 	void setScale(double scale);
 	double getScale();
-	std::tuple<SDL_Rect, SDL_Rect> renderRectInfo();
+	std::tuple<SDL_Rect, SDL_Rect> renderBgRectInfo();
+	std::tuple<SDL_Rect, SDL_Rect> renderFgRectInfo();
 protected:
 	Vector2f pos_;
 	SDL_Texture* bg_tex_;
-	SDL_Rect current_frame_;
+	SDL_Rect bg_frame_;
 	SDL_Texture* fg_tex_;
 	SDL_Rect fg_frame_;
 	double scale_;

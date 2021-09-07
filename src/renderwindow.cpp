@@ -38,8 +38,8 @@ void RenderWindow::clear(int r, int g, int b, int a) {
 	SDL_RenderClear(renderer_);
 }
 
-void RenderWindow::render(std::tuple<SDL_Rect, SDL_Rect> rects, SDL_Texture* bg_tex, SDL_Texture* fg_tex) const {
-	SDL_RenderCopy(renderer_, bg_tex, &std::get<0>(rects), &std::get<1>(rects));
+void RenderWindow::render(std::tuple<SDL_Rect, SDL_Rect> rects, SDL_Texture* tex) const {
+	SDL_RenderCopy(renderer_, tex, &std::get<0>(rects), &std::get<1>(rects));
 }
 
 void RenderWindow::display() const {

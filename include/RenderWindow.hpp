@@ -12,7 +12,7 @@ public:
 	SDL_Texture* loadTexture(const char* file_path);
 	void cleanUp();
 	void clear(int r = 0, int g = 0, int b = 0, int a = 0xFF);
-	void render(std::tuple<SDL_Rect, SDL_Rect> rects, SDL_Texture* bg_tex, SDL_Texture* fg_tex) const;
+	void render(std::tuple<SDL_Rect, SDL_Rect> rects, SDL_Texture* tex) const;
 	void display() const;
 	void showWindow();
 	void renderRect(int r, int g, int b);

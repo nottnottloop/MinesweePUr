@@ -24,6 +24,7 @@ int main(int argc, char* argv[]) {
 	std::vector<std::vector<Cell>> cells;
 
 	//premature optimisation is the root of all fun
+	//code below heavily assumes an 8x8 board
 	cells.resize(8);
 	for (int i = 0; i < 8; ++i) {
 		cells[i].reserve(8);
@@ -34,7 +35,7 @@ int main(int argc, char* argv[]) {
 	constexpr float CENTER_Y = (SCREEN_HEIGHT / 2) - 64.0f * CELL_SCALE * 4;
 	for (int i = 0; i < 8; ++i) {
 		for (int j = 0; j < 8; ++j) {
-			cells[i].push_back(Cell({CENTER_X + 64.0f * CELL_SCALE * j, CENTER_Y + 64.0f * CELL_SCALE * i}, {0, 0, 64, 64}, bg, fg));
+			cells[i].push_back(Cell({CENTER_X + 64.0f * CELL_SCALE * j, CENTER_Y + 64.0f * CELL_SCALE * i}, {0, 0, 64, 64}, {0, 0, 64, 64}, bg, fg));
 			cells[i][j].setScale(CELL_SCALE);
 		}
 	}
@@ -59,9 +60,13 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
+		cells[0][0].changeCellValue(value::THREE);
 		for (int i = 0; i < 8; ++i) {
 			for (int j = 0; j < 8; ++j) {
-				window.render(cells[i][j].renderRectInfo(), cells[i][j].getBgTex(), cells[i][j].getFgTex());
+				window.render(cells[i][j].renderBgRectInfo(), cells[i][j].getBgTex());
+				if (cells[i][j].shown()) {
+					window.render(cells[i][j].renderFgRectInfo(), cells[i][j].getFgTex());
+				}
 			}
 		}
 		window.display();
