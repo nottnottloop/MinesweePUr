@@ -26,15 +26,15 @@ int main(int argc, char* argv[]) {
 	//premature optimisation is the root of all fun
 	//code below heavily assumes an 8x8 board
 	cells.resize(8);
-	for (int i = 0; i < 8; ++i) {
+	for (int i = 0; i < 8; i++) {
 		cells[i].reserve(8);
 	}
 
-	constexpr float CELL_SCALE = 0.5f;
+	constexpr float CELL_SCALE = 0.9f;
 	constexpr float CENTER_X = (SCREEN_WIDTH / 2) - 64.0f * CELL_SCALE * 4;
 	constexpr float CENTER_Y = (SCREEN_HEIGHT / 2) - 64.0f * CELL_SCALE * 4;
-	for (int i = 0; i < 8; ++i) {
-		for (int j = 0; j < 8; ++j) {
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
 			cells[i].push_back(Cell({CENTER_X + 64.0f * CELL_SCALE * j, CENTER_Y + 64.0f * CELL_SCALE * i}, {0, 0, 64, 64}, {0, 0, 64, 64}, bg, fg));
 			cells[i][j].setScale(CELL_SCALE);
 		}
@@ -47,6 +47,17 @@ int main(int argc, char* argv[]) {
 	window.clear();
 	window.display();
 	window.showWindow();
+int rainbow_start[8][8] =
+{
+	{0, 1, 2, 3, 4, 5, 6, 7},
+	{1, 2, 3, 4, 5, 6, 7, 8},
+	{2, 3, 4, 5, 6, 7, 8, 9},
+	{3, 4, 5, 6, 7, 8, 9, 0},
+	{4, 5, 6, 7, 8, 9, 0, 1},
+	{5, 6, 7, 8, 9, 0, 1, 2},
+	{6, 7, 8, 9, 0, 1, 2, 3},
+	{7, 8, 9, 0, 1, 2, 3, 4}
+};
 
 	while (!quit) {
 		while (SDL_PollEvent(&event)) {
@@ -60,11 +71,17 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
-		cells[0][0].changeCellValue(value::THREE);
-		for (int i = 0; i < 8; ++i) {
-			for (int j = 0; j < 8; ++j) {
+		//just for amusement
+
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
 				window.render(cells[i][j].renderBgRectInfo(), cells[i][j].getBgTex());
 				if (cells[i][j].shown()) {
+					cells[i][j].changeCellValue(static_cast<value>(rainbow_start[i][j]));
+					rainbow_start[i][j]--;
+					if (rainbow_start[i][j] < 0) {
+						rainbow_start[i][j] = 9;
+					}
 					window.render(cells[i][j].renderFgRectInfo(), cells[i][j].getFgTex());
 				}
 			}
@@ -72,6 +89,7 @@ int main(int argc, char* argv[]) {
 		window.display();
 		//color used is just a random sequence of numbers that I got lucky with
 		window.clear(12, 67, 114);
+		SDL_Delay(500);
 		window.showWindow();
 	}
 
