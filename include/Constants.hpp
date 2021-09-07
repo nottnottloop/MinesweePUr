@@ -1,6 +1,13 @@
 #pragma once
+#define CLEAR_COLOR 12, 67, 114
+
 constexpr int SCREEN_WIDTH = 640;
 constexpr int SCREEN_HEIGHT = 480;
+
+constexpr int CLEAR_R = 12;
+constexpr int CLEAR_G = 67;
+constexpr int CLEAR_B = 114;
+constexpr int CLEAR_A = 0xFF;
 
 enum class value {
 	ONE,
