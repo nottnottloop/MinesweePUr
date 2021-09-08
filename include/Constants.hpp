@@ -13,6 +13,9 @@ constexpr float CELL_SCALE = 0.8f;
 constexpr float CENTER_X = (SCREEN_WIDTH / 2) - 64.0f * CELL_SCALE * 4;
 constexpr float CENTER_Y = (SCREEN_HEIGHT / 2) - 64.0f * CELL_SCALE * 4;
 
+extern SDL_Texture* bg;
+extern SDL_Texture* fg;
+
 enum class value {
 	ONE,
 	TWO,

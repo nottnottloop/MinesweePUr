@@ -2,9 +2,7 @@
 #include <SDL.h>
 #include <vector>
 #include <Cell.hpp>
-
-extern SDL_Texture* bg;
-extern SDL_Texture* fg;
+#include "Constants.hpp"
 
 class Game {
 public:

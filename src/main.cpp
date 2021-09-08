@@ -43,7 +43,6 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
-		game.cell(0, 0).changeCellValue(value::THREE);
 		for (int i = 0; i < 8; ++i) {
 			for (int j = 0; j < 8; ++j) {
 				window.render(game.cell(i, j).renderBgRectInfo(), game.cell(i, j).getBgTex());
