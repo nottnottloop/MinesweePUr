@@ -47,41 +47,7 @@ void Game::generateBoard() {
 			if (cells_[row][col].getValue() == fg_value::MINE) {
 				continue;
 			}
-			int neighbour_mines = 0;
-			//left
-			if (col - 1 >= 0) {
-				if (cells_[row][col - 1].getValue() == fg_value::MINE) {
-					++neighbour_mines;
-				}
-			}
-			//right
-			if (col + 1 <= 7) {
-				if (cells_[row][col + 1].getValue() == fg_value::MINE) {
-					++neighbour_mines;
-				}
-			}
-			//up
-			if (row - 1 >= 0) {
-				for (int i = -1; i < 2; ++i) {
-					if (col + i < 0 || col + i > 7) {
-						continue;
-					}
-					if (cells_[row - 1][col + i].getValue() == fg_value::MINE) {
-						++neighbour_mines;
-					}
-				}
-			}
-			//down
-			if (row + 1 <= 7) {
-				for (int i = -1; i < 2; ++i) {
-					if (col + i < 0 || col + i > 7) {
-						continue;
-					}
-					if (cells_[row + 1][col + i].getValue() == fg_value::MINE) {
-						++neighbour_mines;
-					}
-				}
-			}
+			int neighbour_mines = checkNeighbourMines(row, col);
 			if (neighbour_mines == 0) {
 				cells_[row][col].setCellValue(fg_value::NONE);
 			} else {
@@ -91,17 +57,63 @@ void Game::generateBoard() {
 	}
 }
 
-Entity* Game::checkClick(Sint32 x, Sint32 y) {
+int Game::checkNeighbourMines(int row, int col) {
+	int neighbour_mines = 0;
+	//left
+	if (col - 1 >= 0) {
+		if (cells_[row][col - 1].getValue() == fg_value::MINE) {
+			++neighbour_mines;
+		}
+	}
+	//right
+	if (col + 1 <= 7) {
+		if (cells_[row][col + 1].getValue() == fg_value::MINE) {
+			++neighbour_mines;
+		}
+	}
+	//up
+	if (row - 1 >= 0) {
+		for (int i = -1; i < 2; ++i) {
+			if (col + i < 0 || col + i > 7) {
+				continue;
+			}
+			if (cells_[row - 1][col + i].getValue() == fg_value::MINE) {
+				++neighbour_mines;
+			}
+		}
+	}
+	//down
+	if (row + 1 <= 7) {
+		for (int i = -1; i < 2; ++i) {
+			if (col + i < 0 || col + i > 7) {
+				continue;
+			}
+			if (cells_[row + 1][col + i].getValue() == fg_value::MINE) {
+				++neighbour_mines;
+			}
+		}
+	}
+	return neighbour_mines;
+}
+
+void Game::revealNeighbours() {
+	
+}
+
+void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
 	for (int row = 0; row < 8; ++row){
 		for (int col = 0; col < 8; ++col){
 			if (cells_[row][col].getPos().x < x && cells_[row][col].getPos().x + 64.0f * CELL_SCALE > x) {
 				if (cells_[row][col].getPos().y < y && cells_[row][col].getPos().y + 64.0f * CELL_SCALE > y) {
-					return &cells_[row][col];
+					if (right_mouse) {
+						cells_[row][col].rightClick();
+					} else {
+						cells_[row][col].leftClick();
+					}
 				}
 			}
 		}
 	}
-	return nullptr;
 }
 
 Cell& Game::cell(int i, int j) {

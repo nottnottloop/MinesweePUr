@@ -39,19 +39,11 @@ int main(int argc, char* argv[]) {
 					break;
 				case SDL_MOUSEBUTTONDOWN:
 					switch (event.button.button) {
-						case SDL_BUTTON_LEFT: {
-							Entity* ptr = game.checkClick(event.button.x, event.button.y);
-							if (ptr != nullptr) {
-								ptr->leftClick();
-							}
-						}
+						case SDL_BUTTON_LEFT:
+							game.checkCellClick(event.button.x, event.button.y, false);
 							break;
-						case SDL_BUTTON_RIGHT: {
-							Entity* ptr = game.checkClick(event.button.x, event.button.y);
-							if (ptr != nullptr) {
-								ptr->rightClick();
-							}
-						}
+						case SDL_BUTTON_RIGHT:
+							game.checkCellClick(event.button.x, event.button.y, true);
 							break;
 					}
 				break;

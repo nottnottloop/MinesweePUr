@@ -9,7 +9,9 @@ public:
 	Game();
 	void initBoard();
 	void generateBoard();
-	Entity* checkClick(Sint32 x, Sint32 y);
+	int checkNeighbourMines(int row, int col);
+	void revealNeighbours();
+	void checkCellClick(Sint32 x, Sint32, bool right_mouse);
 	Cell& cell(int i, int j);
 private:
 	std::vector<std::vector<Cell>> cells_;
