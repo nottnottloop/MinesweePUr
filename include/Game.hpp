@@ -3,13 +3,14 @@
 #include <vector>
 #include <Cell.hpp>
 
+extern SDL_Texture* bg;
+extern SDL_Texture* fg;
+
 class Game {
 public:
-	Game(SDL_Texture* bg, SDL_Texture* fg);
+	Game();
 	void initBoard();
 	Cell& cell(int i, int j);
 private:
-	SDL_Texture* bg_tex_;
-	SDL_Texture* fg_tex_;
 	std::vector<std::vector<Cell>> cells_;
 };

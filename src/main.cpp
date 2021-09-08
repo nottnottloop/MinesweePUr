@@ -10,6 +10,10 @@
 #include "Constants.hpp"
 #include "Game.hpp"
 
+RenderWindow window("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
+SDL_Texture* bg = window.loadTexture("res/bg.png");
+SDL_Texture* fg = window.loadTexture("res/fg.png");
+
 int main(int argc, char* argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
 		std::cout << "SDL_Init has failed. sdl_error: " << SDL_GetError() << "\n";
@@ -17,12 +21,7 @@ int main(int argc, char* argv[]) {
 	if (!(IMG_Init(IMG_INIT_PNG)))
 		std::cout << "IMG_Init has failed. Error: " << SDL_GetError() << "\n";
 
-	RenderWindow window("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
-
-	SDL_Texture* bg = window.loadTexture("res/bg.png");
-	SDL_Texture* fg = window.loadTexture("res/fg.png");
-
-	Game game(bg, fg);
+	Game game;
 
 	bool quit = false;
 	SDL_Event event;
