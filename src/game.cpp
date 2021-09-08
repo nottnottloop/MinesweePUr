@@ -1,3 +1,4 @@
+#include <SDL.h>
 #include <random>
 #include "Game.hpp"
 #include "Constants.hpp"
@@ -22,8 +23,6 @@ void Game::initBoard() {
 	for (int i = 0; i < 8; ++i) {
 		for (int j = 0; j < 8; ++j) {
 			cells_[i].emplace_back(Cell({CENTER_X + 64.0f * CELL_SCALE * j, CENTER_Y + 64.0f * CELL_SCALE * i}, {0, 0, 64, 64}, {0, 0, 64, 64}, bg, fg));
-			cells_[i][j].setScale(CELL_SCALE);
-			cells_[i][j].setCellValue(fg_value::NONE);
 		}
 	}
 }
@@ -90,6 +89,19 @@ void Game::generateBoard() {
 			}
 		}
 	}
+}
+
+Entity* Game::checkClick(Sint32 x, Sint32 y) {
+	for (int row = 0; row < 8; ++row){
+		for (int col = 0; col < 8; ++col){
+			if (cells_[row][col].getPos().x < x && cells_[row][col].getPos().x + 64.0f * CELL_SCALE > x) {
+				if (cells_[row][col].getPos().y < y && cells_[row][col].getPos().y + 64.0f * CELL_SCALE > y) {
+					return &cells_[row][col];
+				}
+			}
+		}
+	}
+	return nullptr;
 }
 
 Cell& Game::cell(int i, int j) {

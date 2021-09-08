@@ -33,12 +33,26 @@ int main(int argc, char* argv[]) {
 
 	while (!quit) {
 		while (SDL_PollEvent(&event)) {
-			switch(event.type) {
+			switch (event.type) {
 				case SDL_QUIT:
 					quit = true;
 					break;
-				case SDL_KEYDOWN:
-					switch(event.key.keysym.sym) {
+				case SDL_MOUSEBUTTONDOWN:
+					switch (event.button.button) {
+						case SDL_BUTTON_LEFT: {
+							Entity* ptr = game.checkClick(event.button.x, event.button.y);
+							if (ptr != nullptr) {
+								ptr->leftClick();
+							}
+						}
+							break;
+						case SDL_BUTTON_RIGHT: {
+							Entity* ptr = game.checkClick(event.button.x, event.button.y);
+							if (ptr != nullptr) {
+								ptr->rightClick();
+							}
+						}
+							break;
 					}
 				break;
 			}
@@ -46,7 +60,7 @@ int main(int argc, char* argv[]) {
 		for (int i = 0; i < 8; ++i) {
 			for (int j = 0; j < 8; ++j) {
 				window.render(game.cell(i, j).renderBgRectInfo(), game.cell(i, j).getBgTex());
-				if (game.cell(i, j).shown()) {
+				if (game.cell(i, j).fgShown()) {
 					window.render(game.cell(i, j).renderFgRectInfo(), game.cell(i, j).getFgTex());
 				}
 			}

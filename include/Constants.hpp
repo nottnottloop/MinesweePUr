@@ -27,3 +27,8 @@ enum class fg_value {
 	MINE,
 	NONE
 };
+
+enum class bg_value {
+	NOT_CLICKED,
+	CLICKED
+};

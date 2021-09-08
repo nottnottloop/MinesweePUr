@@ -24,6 +24,8 @@ public:
 	double getScale();
 	std::tuple<SDL_Rect, SDL_Rect> renderBgRectInfo();
 	std::tuple<SDL_Rect, SDL_Rect> renderFgRectInfo();
+	virtual void leftClick() = 0;
+	virtual void rightClick() = 0;
 protected:
 	Vector2f pos_;
 	SDL_Texture* bg_tex_;
