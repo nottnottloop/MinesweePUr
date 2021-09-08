@@ -7,9 +7,9 @@
 class Cell : public Entity {
 public:
 	Cell(Vector2f pos, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg) : Entity(pos, bg_frame, fg_frame, bg, fg) {};
-	void changeCellValue(fg_value val);
-	void changeFg(fg_value val);
-	void changeFlagState();
+	void setCellValue(fg_value val);
+	void setFg(fg_value val);
+	void setFlagState();
 	fg_value getValue();
 	bool shown();
 private:

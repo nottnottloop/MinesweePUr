@@ -1,12 +1,12 @@
 #include "Cell.hpp"
 #include "Constants.hpp"
 
-void Cell::changeCellValue(fg_value val) {
+void Cell::setCellValue(fg_value val) {
 	cell_value_ = val;
-	changeFg(val);
+	setFg(val);
 }
 
-void Cell::changeFg(fg_value val) {
+void Cell::setFg(fg_value val) {
 	if (val != fg_value::NONE) {
 		int num = static_cast<int>(val);
 		fg_frame_.x = num * 64;
@@ -15,12 +15,12 @@ void Cell::changeFg(fg_value val) {
 	}
 }
 
-void Cell::changeFlagState() {
+void Cell::setFlagState() {
 	flagged_ = !flagged_;
 	if (flagged_) {
-		changeFg(fg_value::FLAG);
+		setFg(fg_value::FLAG);
 	} else  {
-		changeFg(fg_value::NONE);
+		setFg(fg_value::NONE);
 	}
 }
 
