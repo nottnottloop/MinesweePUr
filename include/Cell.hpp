@@ -7,13 +7,13 @@
 class Cell : public Entity {
 public:
 	Cell(Vector2f pos, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg) : Entity(pos, bg_frame, fg_frame, bg, fg) {};
-	void changeCellValue(value val);
-	void changeFg(value val);
+	void changeCellValue(fg_value val);
+	void changeFg(fg_value val);
 	void changeFlagState();
-	value getValue();
+	fg_value getValue();
 	bool shown();
 private:
-	value cell_value_;
+	fg_value cell_value_;
 	bool clicked_;
 	bool flagged_;
 };
