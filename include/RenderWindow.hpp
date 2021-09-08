@@ -12,7 +12,8 @@ public:
 	RenderWindow(const char* title, int w, int h);
 	SDL_Texture* loadTexture(const char* file_path);
 	void cleanUp();
-	void clear(int r = CLEAR_R, int g = CLEAR_G, int b = CLEAR_B, int a = CLEAR_A);
+	void clear();
+	void clear(int r, int g, int b, int a);
 	void render(std::tuple<SDL_Rect, SDL_Rect> rects, SDL_Texture* tex) const;
 	void display() const;
 	void showWindow();

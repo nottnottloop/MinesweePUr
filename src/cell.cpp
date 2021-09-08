@@ -29,6 +29,7 @@ fg_value Cell::getValue() {
 }
 
 bool Cell::shown() {
+	//DEBUG to show all cells
 	return true;
 	if (clicked_ || flagged_) {
 		return true;

@@ -52,7 +52,6 @@ int main(int argc, char* argv[]) {
 			}
 		}
 		window.display();
-		//color used is just a random sequence of numbers that I got lucky with
 		window.clear();
 		window.showWindow();
 	}

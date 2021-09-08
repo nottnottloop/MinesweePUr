@@ -22,6 +22,10 @@ void Game::initBoard() {
 	}
 }
 
+void Game::generateBoard() {
+	//first, place the mines
+}
+
 Cell& Game::cell(int i, int j) {
 	return cells_[i][j];
 }
