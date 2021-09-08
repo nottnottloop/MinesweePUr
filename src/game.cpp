@@ -1,9 +1,14 @@
+#include <random>
 #include "Game.hpp"
 #include "Constants.hpp"
 #include "Cell.hpp"
 
+std::random_device rds;
+std::mt19937_64 rd(rds());
+
 Game::Game() {
 	initBoard();
+	generateBoard();
 }
 
 void Game::initBoard() {
@@ -24,7 +29,18 @@ void Game::initBoard() {
 }
 
 void Game::generateBoard() {
-	//first, place the mines
+	//mines
+	for (int i = 0; i < NUM_MINES; ++i) {
+		for (;;) {
+			int row = rd() % 8;
+			int col = rd() % 8;
+			if (cells_[row][col].getValue() == fg_value::MINE) {
+				continue;
+			}
+			cells_[row][col].setCellValue(fg_value::MINE);
+			break;
+		}
+	}
 }
 
 Cell& Game::cell(int i, int j) {
