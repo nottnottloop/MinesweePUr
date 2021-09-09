@@ -40,6 +40,7 @@ void Game::generateBoard() {
 				continue;
 			}
 			cells_[row][col].setCellValue(fg_value::MINE);
+			printf("%d, %d\n", row, col);
 			break;
 		}
 	}
@@ -111,15 +112,37 @@ int Game::checkNeighbours(int row, int col, fg_value val) {
 	}
 	return neighbours;
 }
+
 void Game::revealNeighbours(int row, int col) {
 	std::vector<std::pair<int, int>> check_queue;
 	check_queue.push_back(std::pair<int, int>(row, col));
-	//while (!check_queue.empty()) {
-	//	if (cells_[check_queue.back().first][check_queue.back().second].getValue() != fg_value::MINE) {
-	//		//up
-
-	//	}
-	//}
+	while (!check_queue.empty()) {
+		int check_row = check_queue.back().first;
+		int check_col = check_queue.back().second;
+		if (cells_[check_row][check_col].getValue() == fg_value::MINE) {
+			check_queue.pop_back();
+			continue;
+		}
+		bool popped_currently_checking = false;
+		for (int i = -1; i < 2; ++i) {
+			for (int j = -1; j < 2; ++j) {
+				if ((i == 0 && j == 0) || !cellRefPossible(check_row + i, check_col + j)) {
+					continue;
+				}
+				if (cells_[check_row + i][check_col + j].getValue() != fg_value::MINE && !cells_[check_row + i][check_col + j].fgShown()) {
+					if (!popped_currently_checking) {
+						check_queue.pop_back();
+						popped_currently_checking = true;
+					}
+					check_queue.push_back(std::pair<int, int>(check_row + i, check_col + j));
+					cells_[check_row + i][check_col + j].leftClick();
+					printf("Revealing %d, %d\n", check_row + i, check_col + j);
+					continue;
+				}
+			}
+		}
+		check_queue.pop_back();
+	}
 }
 
 void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
