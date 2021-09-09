@@ -100,7 +100,7 @@ void Game::generateBoard() {
 				continue;
 			}
 			cells_[row][col].setCellValue(fg_value::MINE);
-			printf("%d, %d\n", row, col);
+			printf("Mine: %d, %d\n", row, col);
 			break;
 		}
 	}

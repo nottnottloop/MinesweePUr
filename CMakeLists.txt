@@ -13,7 +13,7 @@ set (SOURCES
 )
 
 add_executable (MinesweePUr ${SOURCES})
-# add_executable (MinesweePUr+ WIN32 ${SOURCES})
+# add_executable (MinesweePUr WIN32 ${SOURCES})
 
 target_include_directories (MinesweePUr PUBLIC
 	C:/dev/Libraries/SDL2-2.0.16/include/SDL2
