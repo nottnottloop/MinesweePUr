@@ -67,21 +67,21 @@ fg_value Game::determineCellValue(int row, int col) {
 	}
 	int neighbour_mines = 0;
 	//left
-	if (col - 1 >= 0) {
+	if (cellRefPossible(row, col - 1)) {
 		if (cells_[row][col - 1].getValue() == fg_value::MINE) {
 			++neighbour_mines;
 		}
 	}
 	//right
-	if (col + 1 <= 7) {
+	if (cellRefPossible(row, col + 1)) {
 		if (cells_[row][col + 1].getValue() == fg_value::MINE) {
 			++neighbour_mines;
 		}
 	}
 	//up
-	if (row - 1 >= 0) {
+	if (cellRefPossible(row - 1, col)) {
 		for (int i = -1; i < 2; ++i) {
-			if (col + i < 0 || col + i > 7) {
+			if (!cellRefPossible(row, col + i)) {
 				continue;
 			}
 			if (cells_[row - 1][col + i].getValue() == fg_value::MINE) {
@@ -90,9 +90,9 @@ fg_value Game::determineCellValue(int row, int col) {
 		}
 	}
 	//down
-	if (row + 1 <= 7) {
+	if (cellRefPossible(row + 1, col)) {
 		for (int i = -1; i < 2; ++i) {
-			if (col + i < 0 || col + i > 7) {
+			if (!cellRefPossible(row, col + i)) {
 				continue;
 			}
 			if (cells_[row + 1][col + i].getValue() == fg_value::MINE) {
