@@ -23,4 +23,4 @@ target_link_directories (MinesweePUr PUBLIC
 	C:/dev/Libraries/SDL2-2.0.16/lib/x64
 )
 
-target_link_libraries(MinesweePUr SDL2main SDL2 SDL2_image)
+target_link_libraries(MinesweePUr SDL2main SDL2 SDL2_image SDL2_ttf)

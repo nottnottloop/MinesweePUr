@@ -1,5 +1,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <iostream>
 #include <vector>
 #include <array>
@@ -47,6 +48,9 @@ int main(int argc, char* argv[]) {
 
 	if (!(IMG_Init(IMG_INIT_PNG)))
 		std::cout << "IMG_Init has failed. Error: " << SDL_GetError() << "\n";
+
+	if (!(TTF_Init()))
+		std::cout << "TTF_Init has failed. Error: " << SDL_GetError() << "\n";
 
 #ifdef DEBUG_MINES
 	Game game(8, 8, DEBUG_MINES);
@@ -142,6 +146,8 @@ int main(int argc, char* argv[]) {
 	}
 
 	window.cleanUp();
+	IMG_Quit();
+	TTF_Quit();
 	SDL_Quit();
 
 	return 0;
