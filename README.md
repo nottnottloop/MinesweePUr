@@ -1,3 +1,3 @@
 # MinesweePUr
 
-The PU stands for powerups
+![Beginner MinesweePUr](images/beginner.png)

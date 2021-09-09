@@ -1,3 +1,10 @@
-build
-debug
-.vscode
+*
+!include/
+!asefiles/
+!res/
+!src/
+!.gitignore
+!.gitattributes
+!.CMakeLists.txt
+!.README.md
+!images/
