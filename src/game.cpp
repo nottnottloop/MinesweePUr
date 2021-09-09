@@ -10,22 +10,29 @@
 std::random_device rds;
 std::mt19937_64 rd(rds());
 
-Game::Game() {
+Game::Game(int board_rows, int board_cols) 
+: board_rows_(board_rows), board_cols_(board_cols), lost_(false) {
 	initBoard();
 	generateBoard();
-	lost_ = false;
+}
+
+int Game::getRows() {
+	return board_rows_;
+}
+
+int Game::getCols() {
+	return board_cols_;
 }
 
 void Game::initBoard() {
 	//premature optimisation is the root of all fun
-	//code below heavily assumes an 8x8 board
-	cells_.resize(8);
-	for (int i = 0; i < 8; ++i) {
-		cells_[i].reserve(8);
+	cells_.resize(getRows());
+	for (int i = 0; i < getCols(); ++i) {
+		cells_[i].reserve(getCols());
 	}
 
-	for (int i = 0; i < 8; ++i) {
-		for (int j = 0; j < 8; ++j) {
+	for (int i = 0; i < getRows(); ++i) {
+		for (int j = 0; j < getCols(); ++j) {
 			cells_[i].emplace_back(Cell({CENTER_X + 64.0f * CELL_SCALE * j, CENTER_Y + 64.0f * CELL_SCALE * i}, {0, 0, 64, 64}, {0, 0, 64, 64}, bg, fg));
 		}
 	}
@@ -35,8 +42,8 @@ void Game::generateBoard() {
 	//mines
 	for (int i = 0; i < NUM_MINES; ++i) {
 		for (;;) {
-			int row = rd() % 8;
-			int col = rd() % 8;
+			int row = rd() % getRows();
+			int col = rd() % getCols();
 			if (cells_[row][col].getValue() == fg_value::MINE) {
 				continue;
 			}
@@ -47,8 +54,8 @@ void Game::generateBoard() {
 	}
 
 	//numbers
-	for (int row = 0; row < 8; ++row) {
-		for (int col = 0; col < 8; ++col) {
+	for (int row = 0; row < getRows(); ++row) {
+		for (int col = 0; col < getCols(); ++col) {
 			fg_value neighbour_mines = determineCellValue(row, col);
 			cells_[row][col].setCellValue(neighbour_mines);
 		}
@@ -115,7 +122,7 @@ int Game::checkNeighbours(int row, int col, fg_value val) {
 }
 
 void Game::revealNeighbours(int row, int col) {
-						printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+	printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	std::vector<std::pair<int, int>> check_queue;
 	check_queue.push_back(std::pair<int, int>(row, col));
 	while (!check_queue.empty()) {
@@ -133,7 +140,7 @@ void Game::revealNeighbours(int row, int col) {
 					continue;
 				}
 				//only queue cells that aren't mines and aren't already clicked
-				if (cells_[check_row + i][check_col + j].getValue() != fg_value::MINE && !cells_[check_row + i][check_col + j].fgShown()) {
+				if (cells_[check_row + i][check_col + j].getValue() != fg_value::MINE && !cells_[check_row + i][check_col + j].clicked()) {
 					if (!popped_currently_checking) {
 						check_queue.pop_back();
 						printf("Popping %d, %d\n", check_row, check_col);
@@ -162,14 +169,14 @@ void Game::checkLose(int row, int col) {
 }
 
 void Game::lose() {
-	printf("you LOSEEEEEE :((");
+	printf("you LOSEEEEEE :((\n");
 	lost_ = true;
 }
 
 void Game::checkWin() {
 	int remaining = 0;
-	for (int i = 0; i < 8; ++i) {
-		for (int j = 0; j < 8; ++j) {
+	for (int i = 0; i < getRows(); ++i) {
+		for (int j = 0; j < getCols(); ++j) {
 			if (!cells_[i][j].clicked()) {
 				if (++remaining > NUM_MINES) {
 					goto the_end;
@@ -184,12 +191,12 @@ void Game::checkWin() {
 }
 
 void Game::win() {
-	printf("YOU WINNNNNNNNNNNNNNNNNNNNNN");
+	printf("YOU WINNNNNNNNNNNNNNNNNNNNNN\n");
 }
 
 void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
-	for (int row = 0; row < 8; ++row){
-		for (int col = 0; col < 8; ++col){
+	for (int row = 0; row < getRows(); ++row){
+		for (int col = 0; col < getCols(); ++col){
 			if (cells_[row][col].getPos().x < x && cells_[row][col].getPos().x + 64.0f * CELL_SCALE > x) {
 				if (cells_[row][col].getPos().y < y && cells_[row][col].getPos().y + 64.0f * CELL_SCALE > y) {
 					if (right_mouse) {

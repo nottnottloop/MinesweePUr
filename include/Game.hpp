@@ -6,7 +6,9 @@
 
 class Game {
 public:
-	Game();
+	Game(int board_rows, int board_cols);
+	int getRows();
+	int getCols();
 	void initBoard();
 	void generateBoard();
 	bool cellRefPossible(int row, int col);
@@ -20,6 +22,8 @@ public:
 	void checkCellClick(Sint32 x, Sint32, bool right_mouse);
 	Cell& cell(int i, int j);
 private:
-	std::vector<std::vector<Cell>> cells_;
+	int board_rows_;
+	int board_cols_;
 	bool lost_;
+	std::vector<std::vector<Cell>> cells_;
 };

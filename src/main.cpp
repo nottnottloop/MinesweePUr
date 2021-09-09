@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 	if (!(IMG_Init(IMG_INIT_PNG)))
 		std::cout << "IMG_Init has failed. Error: " << SDL_GetError() << "\n";
 
-	Game game;
+	Game game(8, 8);
 
 	bool quit = false;
 	SDL_Event event;
@@ -49,8 +49,8 @@ int main(int argc, char* argv[]) {
 				break;
 			}
 		}
-		for (int i = 0; i < 8; ++i) {
-			for (int j = 0; j < 8; ++j) {
+		for (int i = 0; i < game.getRows(); ++i) {
+			for (int j = 0; j < game.getCols(); ++j) {
 				window.render(game.cell(i, j).renderBgRectInfo(), game.cell(i, j).getBgTex());
 				if (game.cell(i, j).fgShown()) {
 					window.render(game.cell(i, j).renderFgRectInfo(), game.cell(i, j).getFgTex());
