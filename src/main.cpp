@@ -14,28 +14,34 @@
 #include "Button.hpp"
 #include "Text.hpp"
 
-std::vector<Button*> buttons;
-
-void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse) {
-	for (int i = 0; i < buttons.size(); ++i) {
-		if (buttons[i]->getPos().x < x && buttons[i]->getPos().x + buttons[i]->getFgFrame().w * buttons[i]->getScale() > x) {
-			if (buttons[i]->getPos().y < y && buttons[i]->getPos().y + buttons[i]->getFgFrame().h * buttons[i]->getScale() > y) {
-				if (right_mouse) {
-					buttons[i]->rightClick();
-				} else {
-					buttons[i]->leftClick();
-				}
-			}
-		}
-	}
-}
-
 SDL_Color red = {255, 0, 0};
 SDL_Color green = {0, 255, 0};
 SDL_Color blue = {0, 0, 255};
 SDL_Color cyan = {0, 255, 255};
 SDL_Color white = {255, 255, 255};
 SDL_Color black = {0, 0, 0};
+
+
+//system variables
+//int SCREEN_WIDTH = 640;
+//int SCREEN_HEIGHT = 480;
+int SCREEN_WIDTH = 1024;
+int SCREEN_HEIGHT = 768;
+
+//DEBUG
+//#define DEBUG_MINES 99
+
+RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
+SDL_Texture* bg = window.loadTexture("res/bg.png");
+SDL_Texture* fg = window.loadTexture("res/fg.png");
+SDL_Texture* awesome = window.loadTexture("res/awesome.png");
+SDL_Texture* vol = window.loadTexture("res/vol.png");
+
+Text text({650, 40}, {0, 0});
+
+Mix_Chunk* click;
+Mix_Chunk* kaboom;
+std::vector<Button*> buttons;
 
 void switchLevel(int level, Game& game, Text& text, Button& restart_button) {
 	switch (level) {
@@ -87,25 +93,28 @@ void switchLevel(int level, Game& game, Text& text, Button& restart_button) {
 	}
 }
 
-//system variables
-//int SCREEN_WIDTH = 640;
-//int SCREEN_HEIGHT = 480;
-int SCREEN_WIDTH = 1024;
-int SCREEN_HEIGHT = 768;
+void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& text, Button& restart_button) {
+	for (int i = 0; i < buttons.size(); ++i) {
+		if (buttons[i]->getPos().x < x && buttons[i]->getPos().x + buttons[i]->getFgFrame().w * buttons[i]->getScale() > x) {
+			if (buttons[i]->getPos().y < y && buttons[i]->getPos().y + buttons[i]->getFgFrame().h * buttons[i]->getScale() > y) {
+				if (right_mouse) {
+					buttons[i]->rightClick();
+					//it's like i went to Italy and had an extra large serving
+					if (i < 5 && i > 1) {
+						switchLevel(i - 1, game, text, restart_button);
+					}
+				} else {
+					buttons[i]->leftClick();
+					//it's like i went to Italy and had an extra large serving
+					if (i < 5 && i > 1) {
+						switchLevel(i - 1, game, text, restart_button);
+					}
+				}
+			}
+		}
+	}
+}
 
-//DEBUG
-//#define DEBUG_MINES 99
-
-RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
-SDL_Texture* bg = window.loadTexture("res/bg.png");
-SDL_Texture* fg = window.loadTexture("res/fg.png");
-SDL_Texture* awesome = window.loadTexture("res/awesome.png");
-SDL_Texture* vol = window.loadTexture("res/vol.png");
-
-Text text({650, 40}, {0, 0});
-
-Mix_Chunk* click;
-Mix_Chunk* kaboom;
 
 int main(int argc, char* argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
@@ -140,13 +149,13 @@ int main(int argc, char* argv[]) {
 	Button mute_button({SCREEN_WIDTH - 128.0f, SCREEN_HEIGHT - 128.0f}, {0, 0}, {0, 0, 128, 128}, {0, 0, 128, 128}, nullptr, vol, game, &Game::toggleMute);
 	buttons.push_back(&mute_button);
 
-	Button oneBut({0, 0}, {0, 0}, {0, 0, 60, 60}, {0, 0, 60, 60}, bg, fg, game, &Game::toggleMute);
+	Button oneBut({0, 0}, {0, 0}, {0, 0, 60, 60}, {0, 0, 60, 60}, bg, fg, game, nullptr);
 	buttons.push_back(&oneBut);
 
-	Button twoBut({60, 0}, {0, 0}, {0, 0, 60, 60}, {60, 0, 60, 60}, bg, fg, game, &Game::toggleMute);
+	Button twoBut({60, 0}, {0, 0}, {0, 0, 60, 60}, {60, 0, 60, 60}, bg, fg, game, nullptr);
 	buttons.push_back(&twoBut);
 
-	Button threeBut({120, 0}, {0, 0}, {0, 0, 60, 60}, {120, 0, 60, 60}, bg, fg, game, &Game::toggleMute);
+	Button threeBut({120, 0}, {0, 0}, {0, 0, 60, 60}, {120, 0, 60, 60}, bg, fg, game, nullptr);
 	buttons.push_back(&threeBut);
 
 	click = Mix_LoadWAV("res/click.ogg");
@@ -171,11 +180,11 @@ int main(int argc, char* argv[]) {
 					switch (event.button.button) {
 						case SDL_BUTTON_LEFT:
 							game.checkCellClick(event.button.x, event.button.y, false);
-							checkButtonClick(event.button.x, event.button.y, false);
+							checkButtonClick(event.button.x, event.button.y, false, game, text, restart_button);
 							break;
 						case SDL_BUTTON_RIGHT:
 							game.checkCellClick(event.button.x, event.button.y, true);
-							checkButtonClick(event.button.x, event.button.y, true);
+							checkButtonClick(event.button.x, event.button.y, true, game,text, restart_button);
 							break;
 					}
 				break;
