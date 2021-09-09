@@ -9,6 +9,7 @@ set (SOURCES
 	src/entity.cpp
 	src/game.cpp
 	src/button.cpp
+	src/text.cpp
 )
 
 add_executable (MinesweePUr ${SOURCES})
@@ -23,4 +24,4 @@ target_link_directories (MinesweePUr PUBLIC
 	C:/dev/Libraries/SDL2-2.0.16/lib/x64
 )
 
-target_link_libraries(MinesweePUr SDL2main SDL2 SDL2_image SDL2_ttf)
+target_link_libraries(MinesweePUr SDL2 SDL2main SDL2_image SDL2_ttf)

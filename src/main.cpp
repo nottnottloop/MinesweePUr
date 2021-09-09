@@ -11,6 +11,7 @@
 #include "Constants.hpp"
 #include "Game.hpp"
 #include "Button.hpp"
+#include "Text.hpp"
 
 std::vector<Button*> buttons;
 
@@ -42,15 +43,19 @@ SDL_Texture* bg = window.loadTexture("res/bg.png");
 SDL_Texture* fg = window.loadTexture("res/fg.png");
 SDL_Texture* awesome = window.loadTexture("res/awesome.png");
 
+SDL_Color green = {0, 255, 0};
+SDL_Color white = {255, 255, 255};
+Text text({900, 100}, {0, 0});
+
 int main(int argc, char* argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
 		std::cout << "SDL_Init has failed. sdl_error: " << SDL_GetError() << "\n";
 
 	if (!(IMG_Init(IMG_INIT_PNG)))
-		std::cout << "IMG_Init has failed. Error: " << SDL_GetError() << "\n";
+		std::cout << "IMG_Init has failed. Error: " << IMG_GetError() << "\n";
 
-	if (!(TTF_Init()))
-		std::cout << "TTF_Init has failed. Error: " << SDL_GetError() << "\n";
+	if (TTF_Init())
+		std::cout << "TTF_Init has failed. Error: " << TTF_GetError() << "\n";
 
 #ifdef DEBUG_MINES
 	Game game(8, 8, DEBUG_MINES);
@@ -61,6 +66,8 @@ int main(int argc, char* argv[]) {
 	Button restart_button({SCREEN_WIDTH / 2 - 64.0f, 0}, {0, 15}, {0, 0, 1024, 1024}, {0, 0, 1024, 1024}, nullptr, awesome, game, &Game::restart);
 	restart_button.setScale(0.125f);
 	buttons.push_back(&restart_button);
+
+	text.loadFontTexture("res/fixedsys.ttf", 25, white, "yo");
 
 	bool quit = false;
 	SDL_Event event;
@@ -139,6 +146,7 @@ int main(int argc, char* argv[]) {
 		for (int i = 0; i < buttons.size(); ++i) {
 			window.render(buttons[i]->renderFgRectInfo(), buttons[i]->getFgTex());
 		}
+		window.render(text);
 		game.renderBoard();
 		window.display();
 		window.clear();
@@ -147,6 +155,7 @@ int main(int argc, char* argv[]) {
 
 	window.cleanUp();
 	IMG_Quit();
+	//TTF_CloseFont(font);
 	TTF_Quit();
 	SDL_Quit();
 

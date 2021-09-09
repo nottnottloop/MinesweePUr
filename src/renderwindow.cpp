@@ -1,9 +1,11 @@
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <iostream>
 #include <tuple>
 #include "RenderWindow.hpp"
 #include "Constants.hpp"
+#include "Text.hpp"
 
 RenderWindow::RenderWindow(const char* p_title, const int p_w, const int p_h)
 	:window_(NULL), renderer_(NULL) {
@@ -42,6 +44,10 @@ void RenderWindow::clear() {
 void RenderWindow::clear(int r, int g, int b, int a) {
 	SDL_SetRenderDrawColor(renderer_, r, g, b, a);        
 	SDL_RenderClear(renderer_);
+}
+
+void RenderWindow::render(Text text) const {
+	SDL_RenderCopy(renderer_, text.getFgTex(), nullptr, &text.renderTextInfo());
 }
 
 void RenderWindow::render(std::tuple<SDL_Rect, SDL_Rect> rects, SDL_Texture* tex) const {
