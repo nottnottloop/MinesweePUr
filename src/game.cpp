@@ -65,17 +65,26 @@ fg_value Game::determineCellValue(int row, int col) {
 	if (cells_[row][col].getValue() == fg_value::MINE) {
 		return fg_value::MINE;
 	}
-	int neighbour_mines = 0;
+	int neighbour_mines = checkNeighbours(row, col, fg_value::MINE);
+	if (neighbour_mines == 0) {
+		return fg_value::NONE;
+	}
+	//we subtract one from neighbour_mines because the enum doesn't cast perfectly
+	return static_cast<fg_value>(neighbour_mines - 1);
+}
+
+int Game::checkNeighbours(int row, int col, fg_value val) {
+	int neighbours = 0;
 	//left
 	if (cellRefPossible(row, col - 1)) {
-		if (cells_[row][col - 1].getValue() == fg_value::MINE) {
-			++neighbour_mines;
+		if (cells_[row][col - 1].getValue() == val) {
+			++neighbours;
 		}
 	}
 	//right
 	if (cellRefPossible(row, col + 1)) {
-		if (cells_[row][col + 1].getValue() == fg_value::MINE) {
-			++neighbour_mines;
+		if (cells_[row][col + 1].getValue() == val) {
+			++neighbours;
 		}
 	}
 	//up
@@ -84,8 +93,8 @@ fg_value Game::determineCellValue(int row, int col) {
 			if (!cellRefPossible(row, col + i)) {
 				continue;
 			}
-			if (cells_[row - 1][col + i].getValue() == fg_value::MINE) {
-				++neighbour_mines;
+			if (cells_[row - 1][col + i].getValue() == val) {
+				++neighbours;
 			}
 		}
 	}
@@ -95,24 +104,20 @@ fg_value Game::determineCellValue(int row, int col) {
 			if (!cellRefPossible(row, col + i)) {
 				continue;
 			}
-			if (cells_[row + 1][col + i].getValue() == fg_value::MINE) {
-				++neighbour_mines;
+			if (cells_[row + 1][col + i].getValue() == val) {
+				++neighbours;
 			}
 		}
 	}
-	if (neighbour_mines == 0) {
-		return fg_value::NONE;
-	}
-	//we subtract one from neighbour_mines because the enum doesn't cast perfectly
-	return static_cast<fg_value>(neighbour_mines - 1);
+	return neighbours;
 }
-
 void Game::revealNeighbours(int row, int col) {
 	std::vector<std::pair<int, int>> check_queue;
 	check_queue.push_back(std::pair<int, int>(row, col));
 	//while (!check_queue.empty()) {
-	//	if (determineCellValue(check_queue.back().first, check_queue.back().second) != fg_value::MINE) {
-			
+	//	if (cells_[check_queue.back().first][check_queue.back().second].getValue() != fg_value::MINE) {
+	//		//up
+
 	//	}
 	//}
 }
