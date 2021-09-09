@@ -6,11 +6,12 @@
 
 class Game {
 public:
-	Game(int board_rows, int board_cols);
+	Game(int rows, int cols, int mines);
 	int getRows();
 	int getCols();
+	int getMines();
 	void setCellScale(float scale);
-	void setBoard(int row, int col);
+	void setBoard(int rows, int cols, int mines);
 	void clearBoard();
 	void initBoard();
 	void generateBoard();
@@ -28,6 +29,7 @@ public:
 private:
 	int board_rows_;
 	int board_cols_;
+	int mines_;
 	bool won_;
 	bool lost_;
 	std::vector<std::vector<Cell>> cells_;

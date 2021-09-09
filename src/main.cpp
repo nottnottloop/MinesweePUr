@@ -10,14 +10,14 @@
 #include "Constants.hpp"
 #include "Game.hpp"
 
-//gameplay variables
-int NUM_MINES = 3;
-
 //system variables
 //int SCREEN_WIDTH = 640;
 //int SCREEN_HEIGHT = 480;
 int SCREEN_WIDTH = 1024;
 int SCREEN_HEIGHT = 768;
+
+//DEBUG
+//#define DEBUG_MINES 99
 
 RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 SDL_Texture* bg = window.loadTexture("res/bg.png");
@@ -30,7 +30,11 @@ int main(int argc, char* argv[]) {
 	if (!(IMG_Init(IMG_INIT_PNG)))
 		std::cout << "IMG_Init has failed. Error: " << SDL_GetError() << "\n";
 
-	Game game(8, 8);
+#ifdef DEBUG_MINES
+	Game game(8, 8, DEBUG_MINES);
+#else
+	Game game(8, 8, 10);
+#endif
 
 	bool quit = false;
 	SDL_Event event;
@@ -65,21 +69,33 @@ int main(int argc, char* argv[]) {
 							break;
 						case SDLK_1:
 							game.clearBoard();
-							game.setBoard(8, 8);
+							#ifdef DEBUG_MINES
+								game.setBoard(8, 8, DEBUG_MINES);
+							#else
+								game.setBoard(8, 8, 10);
+							#endif
 							game.setCellScale(0.75f);
 							game.initBoard();
 							game.generateBoard();
 							break;
 						case SDLK_2:
 							game.clearBoard();
-							game.setBoard(16, 16);
+							#ifdef DEBUG_MINES
+								game.setBoard(16, 16, DEBUG_MINES);
+							#else
+								game.setBoard(16, 16, 40);
+							#endif
 							game.setCellScale(0.6f);
 							game.initBoard();
 							game.generateBoard();
 							break;
 						case SDLK_3:
 							game.clearBoard();
-							game.setBoard(16, 30);
+							#ifdef DEBUG_MINES
+								game.setBoard(16, 30, DEBUG_MINES);
+							#else
+								game.setBoard(16, 30, 99);
+							#endif
 							game.setCellScale(0.5f);
 							game.initBoard();
 							game.generateBoard();

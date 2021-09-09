@@ -3,8 +3,6 @@
 
 extern float cell_scale;
 
-extern int NUM_MINES;
-
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
 

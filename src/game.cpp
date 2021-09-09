@@ -14,8 +14,8 @@ float center_x;
 float center_y;
 float cell_scale = 0.75f;
 
-Game::Game(int board_rows, int board_cols) 
-: board_rows_(board_rows), board_cols_(board_cols), lost_(false), won_(false) {
+Game::Game(int rows, int cols, int mines) 
+: board_rows_(rows), board_cols_(cols), lost_(false), won_(false), mines_(mines) {
 	initBoard();
 	generateBoard();
 }
@@ -28,13 +28,18 @@ int Game::getCols() {
 	return board_cols_;
 }
 
+int Game::getMines() {
+	return mines_;
+}
+
 void Game::setCellScale(float scale) {
 	cell_scale = scale;
 }
 
-void Game::setBoard(int row, int col) {
-	board_rows_ = row;
-	board_cols_ = col;
+void Game::setBoard(int rows, int cols, int mines) {
+	board_rows_ = rows;
+	board_cols_ = cols;
+	mines_ = mines;
 }
 
 void Game::clearBoard() {
@@ -65,7 +70,7 @@ void Game::initBoard() {
 
 void Game::generateBoard() {
 	//mines
-	for (int i = 0; i < NUM_MINES; ++i) {
+	for (int i = 0; i < getMines(); ++i) {
 		for (;;) {
 			int row = rd() % getRows();
 			int col = rd() % getCols();
@@ -88,7 +93,7 @@ void Game::generateBoard() {
 }
 
 bool Game::cellRefPossible(int row, int col) {
-	if (col < 0 || col > 7 || row < 0 || row > 7) {
+	if (col < 0 || col > getCols() - 1 || row < 0 || row > getRows() - 1) {
 		return false;
 	} else {
 		return true;
@@ -203,13 +208,13 @@ void Game::checkWin() {
 	for (int i = 0; i < getRows(); ++i) {
 		for (int j = 0; j < getCols(); ++j) {
 			if (!cells_[i][j].clicked()) {
-				if (++remaining > NUM_MINES) {
+				if (++remaining > getMines()) {
 					return;
 				}
 			}
 		}
 	}
-	if (remaining == NUM_MINES && !lost_) {
+	if (remaining == getMines() && !lost_) {
 		win();
 	}
 }
