@@ -104,6 +104,9 @@ int main(int argc, char* argv[]) {
 					}
 			}
 		}
+		//for (int i = 0; i < buttons.size(); ++i) {
+		//	window.render(buttons[i]->renderFgRectInfo(), buttons[i]->getFgTex());
+		//}
 		game.renderBoard();
 		window.display();
 		window.clear();
