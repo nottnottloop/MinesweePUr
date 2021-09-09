@@ -66,18 +66,21 @@ int main(int argc, char* argv[]) {
 						case SDLK_1:
 							game.clearBoard();
 							game.setBoard(8, 8);
+							game.setCellScale(0.75f);
 							game.initBoard();
 							game.generateBoard();
 							break;
 						case SDLK_2:
 							game.clearBoard();
 							game.setBoard(16, 16);
+							game.setCellScale(0.6f);
 							game.initBoard();
 							game.generateBoard();
 							break;
 						case SDLK_3:
 							game.clearBoard();
 							game.setBoard(16, 30);
+							game.setCellScale(0.5f);
 							game.initBoard();
 							game.generateBoard();
 							break;

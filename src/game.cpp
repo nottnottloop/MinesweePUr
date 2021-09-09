@@ -12,7 +12,7 @@ std::mt19937_64 rd(rds());
 
 float center_x;
 float center_y;
-float cell_scale = 0.6f;
+float cell_scale = 0.75f;
 
 Game::Game(int board_rows, int board_cols) 
 : board_rows_(board_rows), board_cols_(board_cols), lost_(false), won_(false) {
@@ -28,13 +28,17 @@ int Game::getCols() {
 	return board_cols_;
 }
 
+void Game::setCellScale(float scale) {
+	cell_scale = scale;
+}
+
 void Game::setBoard(int row, int col) {
 	board_rows_ = row;
 	board_cols_ = col;
 }
 
 void Game::clearBoard() {
-	for (int i = 0; i < getCols(); ++i) {
+	for (int i = 0; i < getRows(); ++i) {
 		cells_[i].clear();
 	}
 	cells_.clear();
@@ -48,7 +52,7 @@ void Game::initBoard() {
 
 	//premature optimisation is the root of all fun
 	cells_.resize(getRows());
-	for (int i = 0; i < getCols(); ++i) {
+	for (int i = 0; i < getRows(); ++i) {
 		cells_[i].reserve(getCols());
 	}
 

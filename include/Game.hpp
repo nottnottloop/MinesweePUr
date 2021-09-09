@@ -9,6 +9,7 @@ public:
 	Game(int board_rows, int board_cols);
 	int getRows();
 	int getCols();
+	void setCellScale(float scale);
 	void setBoard(int row, int col);
 	void clearBoard();
 	void initBoard();
