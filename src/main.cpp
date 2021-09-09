@@ -203,6 +203,7 @@ int main(int argc, char* argv[]) {
 			} else if (i == 1) {
 				buttons[i]->setFgFrame({0, 0, 128, 128});
 			}
+			window.render(buttons[i]->renderBgRectInfo(), buttons[i]->getBgTex());
 			window.render(buttons[i]->renderFgRectInfo(), buttons[i]->getFgTex());
 		}
 		window.render(text);
