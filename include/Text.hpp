@@ -9,4 +9,5 @@ public:
 	void loadFontTexture(const char* file_path, int size, SDL_Color color, const char* text);
 	SDL_Rect Text::renderTextInfo();
 private:
+	
 };

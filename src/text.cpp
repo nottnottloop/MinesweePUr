@@ -9,7 +9,8 @@ Text::Text(Vector2f pos, Vector2f offset)
 }
 
 void Text::loadFontTexture(const char* file_path, int size, SDL_Color color, const char* text) {
-	TTF_Font * font = TTF_OpenFont(file_path, 25);
+	SDL_DestroyTexture(fg_tex_);
+	TTF_Font* font = TTF_OpenFont(file_path, size);
 	SDL_Surface* surface = TTF_RenderText_Solid(font, text, color);
 	fg_tex_ = SDL_CreateTextureFromSurface(window.renderer_, surface);
 	SDL_FreeSurface(surface);

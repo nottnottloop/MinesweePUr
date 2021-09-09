@@ -43,9 +43,13 @@ SDL_Texture* bg = window.loadTexture("res/bg.png");
 SDL_Texture* fg = window.loadTexture("res/fg.png");
 SDL_Texture* awesome = window.loadTexture("res/awesome.png");
 
+SDL_Color red = {255, 0, 0};
 SDL_Color green = {0, 255, 0};
+SDL_Color blue = {0, 0, 255};
+SDL_Color cyan = {0, 255, 255};
 SDL_Color white = {255, 255, 255};
-Text text({900, 100}, {0, 0});
+SDL_Color black = {0, 0, 0};
+Text text({650, 40}, {0, 0});
 
 int main(int argc, char* argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
@@ -67,7 +71,6 @@ int main(int argc, char* argv[]) {
 	restart_button.setScale(0.125f);
 	buttons.push_back(&restart_button);
 
-	text.loadFontTexture("res/fixedsys.ttf", 25, white, "yo");
 
 	bool quit = false;
 	SDL_Event event;
@@ -76,6 +79,7 @@ int main(int argc, char* argv[]) {
 	window.clear();
 	window.display();
 	window.showWindow();
+	text.loadFontTexture(FONT_LOCATION, FONT_SIZE, green, "Beginner");
 
 	while (!quit) {
 		while (SDL_PollEvent(&event)) {
@@ -102,6 +106,8 @@ int main(int argc, char* argv[]) {
 							game.restart();
 							break;
 						case SDLK_1:
+							text.loadFontTexture(FONT_LOCATION, FONT_SIZE, green, "Beginner");
+							text.setOffset({0, 0});
 							game.clearBoard();
 							#ifdef DEBUG_MINES
 								game.setBoard(8, 8, DEBUG_MINES);
@@ -115,6 +121,8 @@ int main(int argc, char* argv[]) {
 							game.generateBoard();
 							break;
 						case SDLK_2:
+							text.loadFontTexture(FONT_LOCATION, FONT_SIZE, cyan, "Medium");
+							text.setOffset({0, -10});
 							game.clearBoard();
 							#ifdef DEBUG_MINES
 								game.setBoard(16, 16, DEBUG_MINES);
@@ -128,6 +136,8 @@ int main(int argc, char* argv[]) {
 							game.generateBoard();
 							break;
 						case SDLK_3:
+							text.loadFontTexture(FONT_LOCATION, FONT_SIZE, red, "Expert");
+							text.setOffset({0, -10});
 							game.clearBoard();
 							#ifdef DEBUG_MINES
 								game.setBoard(16, 30, DEBUG_MINES);
@@ -155,7 +165,6 @@ int main(int argc, char* argv[]) {
 
 	window.cleanUp();
 	IMG_Quit();
-	//TTF_CloseFont(font);
 	TTF_Quit();
 	SDL_Quit();
 
