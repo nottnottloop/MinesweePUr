@@ -9,6 +9,7 @@ public:
 	Game(int board_rows, int board_cols);
 	int getRows();
 	int getCols();
+	void clearBoard();
 	void initBoard();
 	void generateBoard();
 	bool cellRefPossible(int row, int col);
@@ -21,6 +22,7 @@ public:
 	void win();
 	void checkCellClick(Sint32 x, Sint32, bool right_mouse);
 	Cell& cell(int i, int j);
+	void renderBoard();
 private:
 	int board_rows_;
 	int board_cols_;

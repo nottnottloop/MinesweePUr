@@ -24,6 +24,13 @@ int Game::getCols() {
 	return board_cols_;
 }
 
+void Game::clearBoard() {
+	for (int i = 0; i < getCols(); ++i) {
+		cells_[i].clear();
+	}
+	cells_.clear();
+}
+
 void Game::initBoard() {
 	//premature optimisation is the root of all fun
 	cells_.resize(getRows());
@@ -215,4 +222,15 @@ void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
 
 Cell& Game::cell(int i, int j) {
 	return cells_[i][j];
+}
+
+void Game::renderBoard() {
+	for (int i = 0; i < getRows(); ++i) {
+		for (int j = 0; j < getCols(); ++j) {
+			window.render(cell(i, j).renderBgRectInfo(), cell(i, j).getBgTex());
+			if (cell(i, j).fgShown()) {
+				window.render(cell(i, j).renderFgRectInfo(), cell(i, j).getFgTex());
+			}
+		}
+	}
 }

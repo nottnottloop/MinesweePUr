@@ -47,16 +47,16 @@ int main(int argc, char* argv[]) {
 							break;
 					}
 				break;
+				case SDL_KEYDOWN:
+					switch (event.key.keysym.sym) {
+						case SDLK_r:
+							game.clearBoard();
+							game.initBoard();
+							game.generateBoard();
+					}
 			}
 		}
-		for (int i = 0; i < game.getRows(); ++i) {
-			for (int j = 0; j < game.getCols(); ++j) {
-				window.render(game.cell(i, j).renderBgRectInfo(), game.cell(i, j).getBgTex());
-				if (game.cell(i, j).fgShown()) {
-					window.render(game.cell(i, j).renderFgRectInfo(), game.cell(i, j).getFgTex());
-				}
-			}
-		}
+		game.renderBoard();
 		window.display();
 		window.clear();
 		window.showWindow();
