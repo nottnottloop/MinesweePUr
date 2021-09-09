@@ -114,6 +114,7 @@ int Game::checkNeighbours(int row, int col, fg_value val) {
 }
 
 void Game::revealNeighbours(int row, int col) {
+						printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 	std::vector<std::pair<int, int>> check_queue;
 	check_queue.push_back(std::pair<int, int>(row, col));
 	while (!check_queue.empty()) {
@@ -132,6 +133,7 @@ void Game::revealNeighbours(int row, int col) {
 				if (cells_[check_row + i][check_col + j].getValue() != fg_value::MINE && !cells_[check_row + i][check_col + j].fgShown()) {
 					if (!popped_currently_checking) {
 						check_queue.pop_back();
+						printf("Popping %d, %d\n", check_row, check_col);
 						popped_currently_checking = true;
 					}
 					check_queue.push_back(std::pair<int, int>(check_row + i, check_col + j));
@@ -141,7 +143,9 @@ void Game::revealNeighbours(int row, int col) {
 				}
 			}
 		}
+		if (!popped_currently_checking) {
 		check_queue.pop_back();
+		}
 	}
 }
 
