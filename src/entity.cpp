@@ -12,8 +12,43 @@ Vector2f Entity::getPos() const {
 	return pos_;
 }
 
+bool Entity::getVisible() {
+	return visible_;
+}
+
+void Entity::setVisible() {
+	visible_ = true;
+}
+
+void Entity::setInvisible() {
+	visible_ = false;
+}
+
+void Entity::toggleVisible() {
+	visible_ = !visible_;
+}
+
+bool Entity::getClickable() {
+	return clickable_;
+}
+
+void Entity::setClickable() {
+	clickable_ = true;
+}
+
+void Entity::setUnclickable() {
+	clickable_ = false;
+}
+
+void Entity::toggleClickable() {
+	clickable_ = !visible_;
+}
+
 SDL_Texture* Entity::getBgTex() const {
-	return bg_tex_;
+	if (visible_) {
+		return bg_tex_;
+	}
+	return nullptr;
 }
 
 void Entity::setBgTex(SDL_Texture* tex) {
@@ -21,7 +56,10 @@ void Entity::setBgTex(SDL_Texture* tex) {
 }
 
 SDL_Texture* Entity::getFgTex() const {
-	return fg_tex_;
+	if (visible_) {
+		return fg_tex_;
+	}
+	return nullptr;
 }
 
 void Entity::setFgTex(SDL_Texture* tex) {

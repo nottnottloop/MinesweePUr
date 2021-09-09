@@ -22,6 +22,7 @@ int SCREEN_HEIGHT = 768;
 RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 SDL_Texture* bg = window.loadTexture("res/bg.png");
 SDL_Texture* fg = window.loadTexture("res/fg.png");
+SDL_Texture* awesome = window.loadTexture("res/awesome.png");
 
 int main(int argc, char* argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)

@@ -42,7 +42,7 @@ fg_value Cell::getValue() {
 }
 
 void Cell::leftClick() {
-	if (!flagged_) {
+	if (!flagged_ && clickable_) {
 		clicked_ = true;
 		setCellBg(bg_value::CLICKED);
 	}

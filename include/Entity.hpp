@@ -15,6 +15,16 @@ public:
 	SDL_Texture* getFgTex() const;
 	void setFgTex(SDL_Texture* tex);
 
+	bool getVisible();
+	void setVisible();
+	void setInvisible();
+	void toggleVisible();
+
+	bool getClickable();
+	void setClickable();
+	void setUnclickable();
+	void toggleClickable();
+
 	SDL_Rect getBgFrame() const;
 	void setBgFrame(SDL_Rect rect);
 	SDL_Rect getFgFrame() const;
@@ -33,4 +43,6 @@ protected:
 	SDL_Texture* fg_tex_;
 	SDL_Rect fg_frame_;
 	double scale_;
+	bool visible_;
+	bool clickable_;
 };

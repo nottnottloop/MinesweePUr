@@ -244,9 +244,9 @@ void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
 		for (int col = 0; col < getCols(); ++col){
 			if (cells_[row][col].getPos().x < x && cells_[row][col].getPos().x + 60.0f * cell_scale > x) {
 				if (cells_[row][col].getPos().y < y && cells_[row][col].getPos().y + 60.0f * cell_scale > y) {
-					if (right_mouse) {
+					if (right_mouse && cells_[row][col].getClickable()) {
 						cells_[row][col].rightClick();
-					} else if (!cells_[row][col].fgShown()) {
+					} else if (!cells_[row][col].fgShown() && cells_[row][col].getClickable()) {
 						cells_[row][col].leftClick();
 						revealNeighbours(row, col);
 						checkLose(row, col);
@@ -271,4 +271,8 @@ void Game::renderBoard() {
 			}
 		}
 	}
+}
+
+void Game::renderButtons() {
+
 }
