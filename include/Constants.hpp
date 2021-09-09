@@ -1,16 +1,12 @@
 #pragma once
 #include "RenderWindow.hpp"
 
-//gameplay variables
-constexpr int NUM_MINES = 3;
+extern float cell_scale;
 
-//system variables
-constexpr int SCREEN_WIDTH = 640;
-constexpr int SCREEN_HEIGHT = 480;
+extern int NUM_MINES;
 
-constexpr float CELL_SCALE = 0.75f;
-constexpr float CENTER_X = (SCREEN_WIDTH / 2) - 64.0f * CELL_SCALE * 4;
-constexpr float CENTER_Y = (SCREEN_HEIGHT / 2) - 64.0f * CELL_SCALE * 4;
+extern int SCREEN_WIDTH;
+extern int SCREEN_HEIGHT;
 
 extern RenderWindow window;
 extern SDL_Texture* bg;

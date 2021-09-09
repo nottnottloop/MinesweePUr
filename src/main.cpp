@@ -10,6 +10,15 @@
 #include "Constants.hpp"
 #include "Game.hpp"
 
+//gameplay variables
+int NUM_MINES = 3;
+
+//system variables
+//int SCREEN_WIDTH = 640;
+//int SCREEN_HEIGHT = 480;
+int SCREEN_WIDTH = 1024;
+int SCREEN_HEIGHT = 768;
+
 RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 SDL_Texture* bg = window.loadTexture("res/bg.png");
 SDL_Texture* fg = window.loadTexture("res/fg.png");
@@ -53,6 +62,25 @@ int main(int argc, char* argv[]) {
 							game.clearBoard();
 							game.initBoard();
 							game.generateBoard();
+							break;
+						case SDLK_1:
+							game.clearBoard();
+							game.setBoard(8, 8);
+							game.initBoard();
+							game.generateBoard();
+							break;
+						case SDLK_2:
+							game.clearBoard();
+							game.setBoard(16, 16);
+							game.initBoard();
+							game.generateBoard();
+							break;
+						case SDLK_3:
+							game.clearBoard();
+							game.setBoard(16, 30);
+							game.initBoard();
+							game.generateBoard();
+							break;
 					}
 			}
 		}

@@ -10,6 +10,10 @@
 std::random_device rds;
 std::mt19937_64 rd(rds());
 
+float center_x;
+float center_y;
+float cell_scale = 0.6f;
+
 Game::Game(int board_rows, int board_cols) 
 : board_rows_(board_rows), board_cols_(board_cols), lost_(false), won_(false) {
 	initBoard();
@@ -24,6 +28,11 @@ int Game::getCols() {
 	return board_cols_;
 }
 
+void Game::setBoard(int row, int col) {
+	board_rows_ = row;
+	board_cols_ = col;
+}
+
 void Game::clearBoard() {
 	for (int i = 0; i < getCols(); ++i) {
 		cells_[i].clear();
@@ -34,6 +43,9 @@ void Game::clearBoard() {
 }
 
 void Game::initBoard() {
+	center_x = (SCREEN_WIDTH / 2) - 60.0f * cell_scale * (getCols() / 2);
+	center_y = (SCREEN_HEIGHT / 2) - 60.0f * cell_scale * (getRows() / 2);
+
 	//premature optimisation is the root of all fun
 	cells_.resize(getRows());
 	for (int i = 0; i < getCols(); ++i) {
@@ -42,7 +54,7 @@ void Game::initBoard() {
 
 	for (int i = 0; i < getRows(); ++i) {
 		for (int j = 0; j < getCols(); ++j) {
-			cells_[i].emplace_back(Cell({CENTER_X + 64.0f * CELL_SCALE * j, CENTER_Y + 64.0f * CELL_SCALE * i}, {0, 0, 64, 64}, {0, 0, 64, 64}, bg, fg));
+			cells_[i].emplace_back(Cell({center_x + 60.0f * cell_scale * j, center_y + 60.0f * cell_scale * i}, {0, 0, 60, 60}, {0, 0, 60, 60}, bg, fg));
 		}
 	}
 }
@@ -213,8 +225,8 @@ void Game::win() {
 void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
 	for (int row = 0; row < getRows(); ++row){
 		for (int col = 0; col < getCols(); ++col){
-			if (cells_[row][col].getPos().x < x && cells_[row][col].getPos().x + 64.0f * CELL_SCALE > x) {
-				if (cells_[row][col].getPos().y < y && cells_[row][col].getPos().y + 64.0f * CELL_SCALE > y) {
+			if (cells_[row][col].getPos().x < x && cells_[row][col].getPos().x + 60.0f * cell_scale > x) {
+				if (cells_[row][col].getPos().y < y && cells_[row][col].getPos().y + 60.0f * cell_scale > y) {
 					if (right_mouse) {
 						cells_[row][col].rightClick();
 					} else if (!cells_[row][col].fgShown()) {

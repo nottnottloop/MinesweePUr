@@ -3,7 +3,7 @@
 
 Cell::Cell(Vector2f pos, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg)
 : Entity(pos, bg_frame, fg_frame, bg, fg) {
-	setScale(CELL_SCALE);
+	setScale(cell_scale);
 	setCellValue(fg_value::NONE);
 	clicked_ = false;
 	flagged_ = false;
@@ -17,15 +17,15 @@ void Cell::setCellValue(fg_value val) {
 void Cell::setCellFg(fg_value val) {
 	if (val != fg_value::NONE) {
 		int num = static_cast<int>(val);
-		fg_frame_.x = num * 64;
+		fg_frame_.x = num * 60;
 	} else {
-		fg_frame_.x = -64;
+		fg_frame_.x = -60;
 	}
 }
 
 void Cell::setCellBg(bg_value val) {
 	int num = static_cast<int>(val);
-	bg_frame_.x = num * 64;
+	bg_frame_.x = num * 60;
 }
 
 void Cell::setFlagState() {
