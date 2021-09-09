@@ -8,6 +8,7 @@ set (SOURCES
 	src/cell.cpp
 	src/entity.cpp
 	src/game.cpp
+	src/button.cpp
 )
 
 add_executable (MinesweePUr ${SOURCES})
