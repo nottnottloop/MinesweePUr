@@ -43,6 +43,7 @@ RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 SDL_Texture* bg = window.loadTexture("res/bg.png");
 SDL_Texture* fg = window.loadTexture("res/fg.png");
 SDL_Texture* awesome = window.loadTexture("res/awesome.png");
+SDL_Texture* vol = window.loadTexture("res/vol.png");
 
 SDL_Color red = {255, 0, 0};
 SDL_Color green = {0, 255, 0};
@@ -85,6 +86,9 @@ int main(int argc, char* argv[]) {
 	restart_button.setScale(0.125f);
 	buttons.push_back(&restart_button);
 
+	Button mute_button({SCREEN_WIDTH - 128.0f, SCREEN_HEIGHT - 128.0f}, {0, 0}, {0, 0, 128, 128}, {0, 0, 128, 128}, nullptr, vol, game, &Game::toggleMute);
+	buttons.push_back(&mute_button);
+
 	click = Mix_LoadWAV("res/click.ogg");
 	kaboom = Mix_LoadWAV("res/kaboom.ogg");
 
@@ -118,7 +122,6 @@ int main(int argc, char* argv[]) {
 				case SDL_KEYDOWN:
 					switch (event.key.keysym.sym) {
 						case SDLK_r:
-							Mix_PlayChannel(-1, click, 0);
 							game.restart();
 							break;
 						case SDLK_1:
@@ -170,6 +173,12 @@ int main(int argc, char* argv[]) {
 			}
 		}
 		for (int i = 0; i < buttons.size(); ++i) {
+			//this isn't great, but we live and learn
+			if (i == 1 && game.getMute()) {
+				buttons[i]->setFgFrame({128, 0, 128, 128});
+			} else if (i == 1) {
+				buttons[i]->setFgFrame({0, 0, 128, 128});
+			}
 			window.render(buttons[i]->renderFgRectInfo(), buttons[i]->getFgTex());
 		}
 		window.render(text);

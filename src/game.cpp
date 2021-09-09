@@ -16,7 +16,7 @@ float center_y;
 float cell_scale = 1.0f;
 
 Game::Game(int rows, int cols, int mines) 
-: board_rows_(rows), board_cols_(cols), lost_(false), won_(false), mines_(mines), offset_({0, BEGINNER_OFFSET}) {
+: board_rows_(rows), board_cols_(cols), lost_(false), won_(false), mines_(mines), offset_({0, BEGINNER_OFFSET}), muted_(false) {
 	initBoard();
 	generateBoard();
 }
@@ -47,7 +47,18 @@ void Game::setBoard(int rows, int cols, int mines) {
 	mines_ = mines;
 }
 
+void Game::toggleMute() {
+	muted_ = !muted_;
+}
+
+bool Game::getMute() {
+	return muted_;
+}
+
 void Game::restart() {
+	if (!muted_) {
+		Mix_PlayChannel(-1, click, 0);
+	}
 	clearBoard();
 	initBoard();
 	generateBoard();
@@ -212,7 +223,9 @@ void Game::checkLose(int row, int col) {
 void Game::lose() {
 	lost_ = true;
 	printf("you LOSEEEEEE :((\n");
-	Mix_PlayChannel(-1, kaboom, 0);
+	if (!muted_) {
+		Mix_PlayChannel(-1, kaboom, 0);
+	}
 	for (int i = 0; i < getRows(); ++i) {
 		for (int j = 0; j < getCols(); ++j) {
 			if (cells_[i][j].getValue() == fg_value::MINE) {
@@ -260,7 +273,9 @@ void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
 					if (right_mouse && cells_[row][col].getClickable()) {
 						cells_[row][col].rightClick();
 					} else if (!cells_[row][col].fgShown() && cells_[row][col].getClickable()) {
-						Mix_PlayChannel(-1, click, 0);
+						if (!muted_) {
+							Mix_PlayChannel(-1, click, 0);
+						}
 						cells_[row][col].leftClick();
 						revealNeighbours(row, col);
 						checkLose(row, col);

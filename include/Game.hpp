@@ -13,6 +13,8 @@ public:
 	void setCellScale(float scale);
 	void setOffset(Vector2f offset);
 	void setBoard(int rows, int cols, int mines);
+	void toggleMute();
+	bool getMute();
 	void restart();
 	void clearBoard();
 	void initBoard();
@@ -36,5 +38,6 @@ private:
 	int mines_;
 	bool won_;
 	bool lost_;
+	bool muted_;
 	std::vector<std::vector<Cell>> cells_;
 };

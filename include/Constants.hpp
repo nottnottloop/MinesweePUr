@@ -15,6 +15,7 @@ extern int SCREEN_HEIGHT;
 
 extern Mix_Chunk* click;
 extern Mix_Chunk* kaboom;
+
 extern RenderWindow window;
 extern SDL_Texture* bg;
 extern SDL_Texture* fg;
