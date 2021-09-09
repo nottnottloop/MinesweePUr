@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
 #endif
 
 	std::vector<Button*> buttons;
-	//Button restart_button({SCREEN_WIDTH / 2 - 64.0f, 100}, {0, 0, 128, 128}, {0, 0, 128, 128}, awesome, awesome, game, &Game::restart);
+	//Button restart_button({SCREEN_WIDTH / 2 - 64.0f, 100}, {0, 0, 128, 128}, {0, 0, 128, 128}, awesome, awesome, game);
 
 	bool quit = false;
 	SDL_Event event;
