@@ -12,6 +12,7 @@ public:
 	int getMines();
 	void setCellScale(float scale);
 	void setBoard(int rows, int cols, int mines);
+	void restart();
 	void clearBoard();
 	void initBoard();
 	void generateBoard();
