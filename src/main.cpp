@@ -11,6 +11,22 @@
 #include "Game.hpp"
 #include "Button.hpp"
 
+std::vector<Button*> buttons;
+
+void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse) {
+	for (int i = 0; i < buttons.size(); ++i) {
+		if (buttons[i]->getPos().x < x && buttons[i]->getPos().x + buttons[i]->getFgFrame().w * buttons[i]->getScale() > x) {
+			if (buttons[i]->getPos().y < y && buttons[i]->getPos().y + buttons[i]->getFgFrame().h * buttons[i]->getScale() > y) {
+				if (right_mouse) {
+					buttons[i]->rightClick();
+				} else {
+					buttons[i]->leftClick();
+				}
+			}
+		}
+	}
+}
+
 //system variables
 //int SCREEN_WIDTH = 640;
 //int SCREEN_HEIGHT = 480;
@@ -38,7 +54,6 @@ int main(int argc, char* argv[]) {
 	Game game(8, 8, 10);
 #endif
 
-	std::vector<Button*> buttons;
 	Button restart_button({SCREEN_WIDTH / 2 - 64.0f, 35}, {0, 0, 1024, 1024}, {0, 0, 1024, 1024}, nullptr, awesome, game, &Game::restart);
 	restart_button.setScale(0.125f);
 	buttons.push_back(&restart_button);
@@ -61,16 +76,12 @@ int main(int argc, char* argv[]) {
 					switch (event.button.button) {
 						case SDL_BUTTON_LEFT:
 							game.checkCellClick(event.button.x, event.button.y, false);
-							for (int i = 0; i < buttons.size(); ++i) {
-								if (buttons[i]->getPos().x < event.button.x && buttons[i]->getPos().x + buttons[i]->getFgFrame().w * buttons[i]->getScale() > event.button.x) {
-									if (buttons[i]->getPos().y < event.button.y && buttons[i]->getPos().y + buttons[i]->getFgFrame().h * buttons[i]->getScale() > event.button.y) {
-										buttons[i]->leftClick();
-									}
-								}
-							}
+							checkButtonClick(event.button.x, event.button.y, false);
 							break;
 						case SDL_BUTTON_RIGHT:
 							game.checkCellClick(event.button.x, event.button.y, true);
+							checkButtonClick(event.button.x, event.button.y, true);
+							break;
 							break;
 					}
 				break;
