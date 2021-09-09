@@ -4,12 +4,20 @@
 #include "Entity.hpp"
 
 Entity::Entity(Vector2f pos, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg)
-:pos_(pos), bg_frame_(bg_frame), fg_frame_(fg_frame), bg_tex_(bg), fg_tex_(fg), scale_(1), clickable_(true), visible_(true) {
+:pos_(pos), offset_({0.0f, 0.0f}), bg_frame_(bg_frame), fg_frame_(fg_frame), bg_tex_(bg), fg_tex_(fg), scale_(1), clickable_(true), visible_(true) {
 
 }
 
 Vector2f Entity::getPos() const {
-	return pos_;
+	return pos_ + offset_;
+}
+
+Vector2f Entity::getOffset() const {
+	return offset_;
+}
+
+void Entity::setOffset(Vector2f offset) {
+	offset_ = offset;
 }
 
 bool Entity::getVisible() {

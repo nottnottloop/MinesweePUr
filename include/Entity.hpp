@@ -9,6 +9,8 @@ class Entity {
 public:
 	Entity(Vector2f pos, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg);
 	Vector2f getPos() const;
+	Vector2f getOffset() const;
+  void setOffset(Vector2f offset);
 
 	SDL_Texture* getBgTex() const;
 	void setBgTex(SDL_Texture* tex);
@@ -38,6 +40,7 @@ public:
 	virtual void rightClick() = 0;
 protected:
 	Vector2f pos_;
+	Vector2f offset_;
 	SDL_Texture* bg_tex_;
 	SDL_Rect bg_frame_;
 	SDL_Texture* fg_tex_;
