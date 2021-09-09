@@ -186,12 +186,11 @@ void Game::checkWin() {
 		for (int j = 0; j < getCols(); ++j) {
 			if (!cells_[i][j].clicked()) {
 				if (++remaining > NUM_MINES) {
-					goto the_end;
+					return;
 				}
 			}
 		}
 	}
-	the_end:
 	if (remaining == NUM_MINES && !lost_) {
 		win();
 	}
