@@ -26,5 +26,6 @@ enum class fg_value {
 
 enum class bg_value {
 	NOT_CLICKED,
-	CLICKED
+	CLICKED,
+	BLOWN_UP
 };

@@ -199,8 +199,16 @@ void Game::checkLose(int row, int col) {
 }
 
 void Game::lose() {
-	printf("you LOSEEEEEE :((\n");
 	lost_ = true;
+	printf("you LOSEEEEEE :((\n");
+	for (int i = 0; i < getRows(); ++i) {
+		for (int j = 0; j < getCols(); ++j) {
+			if (cells_[i][j].getValue() == fg_value::MINE) {
+				cells_[i][j].leftClick();
+				cells_[i][j].setCellBg(bg_value::BLOWN_UP);
+			}
+		}
+	}
 }
 
 void Game::checkWin() {
@@ -221,6 +229,7 @@ void Game::checkWin() {
 
 void Game::win() {
 	won_ = true;
+	printf("YOU WINNNNNNNNNNNNNNNNNNNNNN\n");
 	for (int i = 0; i < getRows(); ++i) {
 		for (int j = 0; j < getCols(); ++j) {
 			if (!cells_[i][j].clicked()) {
@@ -228,7 +237,6 @@ void Game::win() {
 			}
 		}
 	}
-	printf("YOU WINNNNNNNNNNNNNNNNNNNNNN\n");
 }
 
 void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
