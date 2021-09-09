@@ -219,6 +219,7 @@ void Game::lose() {
 				cells_[i][j].leftClick();
 				cells_[i][j].setCellBg(bg_value::BLOWN_UP);
 			}
+			cells_[i][j].setUnclickable();
 		}
 	}
 }
