@@ -256,6 +256,9 @@ void Game::checkWin() {
 void Game::win() {
 	won_ = true;
 	printf("YOU WINNNNNNNNNNNNNNNNNNNNNN\n");
+	if (!muted_) {
+		Mix_PlayChannel(-1, hellyeah, 0);
+	}
 	for (int i = 0; i < getRows(); ++i) {
 		for (int j = 0; j < getCols(); ++j) {
 			if (!cells_[i][j].clicked()) {

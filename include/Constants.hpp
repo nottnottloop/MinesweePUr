@@ -5,7 +5,7 @@
 extern float cell_scale;
 constexpr int BEGINNER_OFFSET = 50;
 constexpr int MEDIUM_OFFSET = 60;
-constexpr int EXPERT_OFFSET = 50;
+constexpr int EXPERT_OFFSET = 20;
 
 constexpr char* FONT_LOCATION = "res/fixedsys.ttf";
 constexpr int FONT_SIZE = 75;
@@ -15,6 +15,7 @@ extern int SCREEN_HEIGHT;
 
 extern Mix_Chunk* click;
 extern Mix_Chunk* kaboom;
+extern Mix_Chunk* hellyeah;
 
 extern RenderWindow window;
 extern SDL_Texture* bg;

@@ -21,15 +21,13 @@ SDL_Color cyan = {0, 255, 255};
 SDL_Color white = {255, 255, 255};
 SDL_Color black = {0, 0, 0};
 
-
-//system variables
 //int SCREEN_WIDTH = 640;
 //int SCREEN_HEIGHT = 480;
 int SCREEN_WIDTH = 1024;
 int SCREEN_HEIGHT = 768;
 
 //DEBUG
-//#define DEBUG_MINES 99
+//#define DEBUG_MINES 1
 
 RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 SDL_Texture* bg = window.loadTexture("res/bg.png");
@@ -41,6 +39,7 @@ Text text({650, 40}, {0, 0});
 
 Mix_Chunk* click;
 Mix_Chunk* kaboom;
+Mix_Chunk* hellyeah;
 std::vector<Button*> buttons;
 
 void switchLevel(int level, Game& game, Text& text, Button& restart_button) {
@@ -160,6 +159,7 @@ int main(int argc, char* argv[]) {
 
 	click = Mix_LoadWAV("res/click.ogg");
 	kaboom = Mix_LoadWAV("res/kaboom.ogg");
+	hellyeah = Mix_LoadWAV("res/hellyeah.ogg");
 
 	bool quit = false;
 	SDL_Event event;
