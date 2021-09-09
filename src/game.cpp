@@ -42,6 +42,12 @@ void Game::setBoard(int rows, int cols, int mines) {
 	mines_ = mines;
 }
 
+void Game::restart() {
+	clearBoard();
+	initBoard();
+	generateBoard();
+}
+
 void Game::clearBoard() {
 	for (int i = 0; i < getRows(); ++i) {
 		cells_[i].clear();
@@ -273,6 +279,3 @@ void Game::renderBoard() {
 	}
 }
 
-void Game::renderButtons() {
-
-}

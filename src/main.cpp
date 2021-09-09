@@ -9,6 +9,7 @@
 #include "Cell.hpp"
 #include "Constants.hpp"
 #include "Game.hpp"
+#include "Button.hpp"
 
 //system variables
 //int SCREEN_WIDTH = 640;
@@ -36,6 +37,9 @@ int main(int argc, char* argv[]) {
 #else
 	Game game(8, 8, 10);
 #endif
+
+	std::vector<Button*> buttons;
+	//Button restart_button({SCREEN_WIDTH / 2 - 64.0f, 100}, {0, 0, 128, 128}, {0, 0, 128, 128}, awesome, awesome, game, &Game::restart);
 
 	bool quit = false;
 	SDL_Event event;
@@ -105,6 +109,9 @@ int main(int argc, char* argv[]) {
 			}
 		}
 		game.renderBoard();
+		//for (int i = 0; i < buttons.size(); ++i) {
+		//	window.render(buttons[i]->renderFgRectInfo(), buttons[i]->getFgTex());
+		//}
 		window.display();
 		window.clear();
 		window.showWindow();

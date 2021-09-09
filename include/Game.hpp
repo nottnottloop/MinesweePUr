@@ -12,6 +12,7 @@ public:
 	int getMines();
 	void setCellScale(float scale);
 	void setBoard(int rows, int cols, int mines);
+	void restart();
 	void clearBoard();
 	void initBoard();
 	void generateBoard();
@@ -26,7 +27,6 @@ public:
 	void checkCellClick(Sint32 x, Sint32, bool right_mouse);
 	Cell& cell(int i, int j);
 	void renderBoard();
-	void renderButtons();
 private:
 	int board_rows_;
 	int board_cols_;
