@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include <random>
 #include <vector>
 #include <array>
@@ -211,6 +212,7 @@ void Game::checkLose(int row, int col) {
 void Game::lose() {
 	lost_ = true;
 	printf("you LOSEEEEEE :((\n");
+	Mix_PlayChannel(-1, kaboom, 0);
 	for (int i = 0; i < getRows(); ++i) {
 		for (int j = 0; j < getCols(); ++j) {
 			if (cells_[i][j].getValue() == fg_value::MINE) {
@@ -257,6 +259,7 @@ void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
 					if (right_mouse && cells_[row][col].getClickable()) {
 						cells_[row][col].rightClick();
 					} else if (!cells_[row][col].fgShown() && cells_[row][col].getClickable()) {
+						Mix_PlayChannel(-1, click, 0);
 						cells_[row][col].leftClick();
 						revealNeighbours(row, col);
 						checkLose(row, col);

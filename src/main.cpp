@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include <iostream>
 #include <vector>
 #include <array>
@@ -51,6 +52,9 @@ SDL_Color white = {255, 255, 255};
 SDL_Color black = {0, 0, 0};
 Text text({650, 40}, {0, 0});
 
+Mix_Chunk* click;
+Mix_Chunk* kaboom;
+
 int main(int argc, char* argv[]) {
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
 		std::cout << "SDL_Init has failed. sdl_error: " << SDL_GetError() << "\n";
@@ -60,6 +64,16 @@ int main(int argc, char* argv[]) {
 
 	if (TTF_Init())
 		std::cout << "TTF_Init has failed. Error: " << TTF_GetError() << "\n";
+		
+	if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 0) == -1)
+		std::cout << "SDL_mixer has failed. Error: " << Mix_GetError() << "\n";
+
+	int flags = MIX_INIT_OGG;
+	int initted = Mix_Init(flags);
+	if(initted & flags != flags) {
+			printf("Mix_Init: Failed to init required ogg and mod support!\n");
+			printf("Mix_Init: %s\n", Mix_GetError());
+	}
 
 #ifdef DEBUG_MINES
 	Game game(8, 8, DEBUG_MINES);
@@ -71,6 +85,8 @@ int main(int argc, char* argv[]) {
 	restart_button.setScale(0.125f);
 	buttons.push_back(&restart_button);
 
+	click = Mix_LoadWAV("res/click.ogg");
+	kaboom = Mix_LoadWAV("res/kaboom.ogg");
 
 	bool quit = false;
 	SDL_Event event;
@@ -97,12 +113,12 @@ int main(int argc, char* argv[]) {
 							game.checkCellClick(event.button.x, event.button.y, true);
 							checkButtonClick(event.button.x, event.button.y, true);
 							break;
-							break;
 					}
 				break;
 				case SDL_KEYDOWN:
 					switch (event.key.keysym.sym) {
 						case SDLK_r:
+							Mix_PlayChannel(-1, click, 0);
 							game.restart();
 							break;
 						case SDLK_1:
@@ -165,6 +181,7 @@ int main(int argc, char* argv[]) {
 
 	window.cleanUp();
 	IMG_Quit();
+	Mix_Quit();
 	TTF_Quit();
 	SDL_Quit();
 
