@@ -13,6 +13,7 @@ std::mt19937_64 rd(rds());
 Game::Game() {
 	initBoard();
 	generateBoard();
+	lost_ = false;
 }
 
 void Game::initBoard() {
@@ -154,6 +155,38 @@ void Game::revealNeighbours(int row, int col) {
 	}
 }
 
+void Game::checkLose(int row, int col) {
+	if (cells_[row][col].getValue() == fg_value::MINE) {
+		lose();
+	}
+}
+
+void Game::lose() {
+	printf("you LOSEEEEEE :((");
+	lost_ = true;
+}
+
+void Game::checkWin() {
+	int remaining = 0;
+	for (int i = 0; i < 8; ++i) {
+		for (int j = 0; j < 8; ++j) {
+			if (!cells_[i][j].clicked()) {
+				if (++remaining > NUM_MINES) {
+					goto the_end;
+				}
+			}
+		}
+	}
+	the_end:
+	if (remaining == NUM_MINES && !lost_) {
+		win();
+	}
+}
+
+void Game::win() {
+	printf("YOU WINNNNNNNNNNNNNNNNNNNNNN");
+}
+
 void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
 	for (int row = 0; row < 8; ++row){
 		for (int col = 0; col < 8; ++col){
@@ -164,6 +197,8 @@ void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
 					} else if (!cells_[row][col].fgShown()) {
 						cells_[row][col].leftClick();
 						revealNeighbours(row, col);
+						checkLose(row, col);
+						checkWin();
 					}
 				}
 			}

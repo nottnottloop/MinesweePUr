@@ -17,6 +17,7 @@ public:
 	void leftClick();
 	void rightClick();
 	bool fgShown();
+	bool clicked();
 private:
 	fg_value cell_value_;
 	bool clicked_;

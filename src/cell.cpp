@@ -69,3 +69,7 @@ bool Cell::fgShown() {
 		return false;
 	}
 }
+
+bool Cell::clicked() {
+	return clicked_;
+}
