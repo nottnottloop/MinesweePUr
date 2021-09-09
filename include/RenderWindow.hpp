@@ -4,7 +4,6 @@
 #include <tuple>
 
 #include "Entity.hpp"
-#include "Constants.hpp"
 
 class RenderWindow 
 {

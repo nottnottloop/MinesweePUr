@@ -10,7 +10,7 @@
 #include "Constants.hpp"
 #include "Game.hpp"
 
-RenderWindow window("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
+RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 SDL_Texture* bg = window.loadTexture("res/bg.png");
 SDL_Texture* fg = window.loadTexture("res/fg.png");
 
