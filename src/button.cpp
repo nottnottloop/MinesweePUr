@@ -15,9 +15,9 @@ void Button::setFuncPointer(void (Game::*func_pointer)()) {
 }
 
 void Button::leftClick() {
-
+	(game_.*func_pointer_)();
 }
 
 void Button::rightClick() {
-
+	(game_.*func_pointer_)();
 }

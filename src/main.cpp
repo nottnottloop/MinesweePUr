@@ -39,7 +39,8 @@ int main(int argc, char* argv[]) {
 #endif
 
 	std::vector<Button*> buttons;
-	Button restart_button({SCREEN_WIDTH / 2 - 128.0f, 100}, {0, 0, 128, 128}, {0, 0, 128, 128}, nullptr, awesome, game, &Game::restart);
+	Button restart_button({SCREEN_WIDTH / 2 - 64.0f, 35}, {0, 0, 1024, 1024}, {0, 0, 1024, 1024}, nullptr, awesome, game, &Game::restart);
+	restart_button.setScale(0.125f);
 	buttons.push_back(&restart_button);
 
 	bool quit = false;
@@ -60,6 +61,13 @@ int main(int argc, char* argv[]) {
 					switch (event.button.button) {
 						case SDL_BUTTON_LEFT:
 							game.checkCellClick(event.button.x, event.button.y, false);
+							for (int i = 0; i < buttons.size(); ++i) {
+								if (buttons[i]->getPos().x < event.button.x && buttons[i]->getPos().x + buttons[i]->getFgFrame().w * buttons[i]->getScale() > event.button.x) {
+									if (buttons[i]->getPos().y < event.button.y && buttons[i]->getPos().y + buttons[i]->getFgFrame().h * buttons[i]->getScale() > event.button.y) {
+										buttons[i]->leftClick();
+									}
+								}
+							}
 							break;
 						case SDL_BUTTON_RIGHT:
 							game.checkCellClick(event.button.x, event.button.y, true);
@@ -69,9 +77,7 @@ int main(int argc, char* argv[]) {
 				case SDL_KEYDOWN:
 					switch (event.key.keysym.sym) {
 						case SDLK_r:
-							game.clearBoard();
-							game.initBoard();
-							game.generateBoard();
+							game.restart();
 							break;
 						case SDLK_1:
 							game.clearBoard();
