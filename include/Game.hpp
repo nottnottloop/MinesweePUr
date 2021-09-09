@@ -26,6 +26,7 @@ public:
 private:
 	int board_rows_;
 	int board_cols_;
+	bool won_;
 	bool lost_;
 	std::vector<std::vector<Cell>> cells_;
 };

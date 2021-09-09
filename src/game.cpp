@@ -11,7 +11,7 @@ std::random_device rds;
 std::mt19937_64 rd(rds());
 
 Game::Game(int board_rows, int board_cols) 
-: board_rows_(board_rows), board_cols_(board_cols), lost_(false) {
+: board_rows_(board_rows), board_cols_(board_cols), lost_(false), won_(false) {
 	initBoard();
 	generateBoard();
 }
@@ -29,6 +29,8 @@ void Game::clearBoard() {
 		cells_[i].clear();
 	}
 	cells_.clear();
+	lost_ = false;
+	won_ = false;
 }
 
 void Game::initBoard() {
@@ -197,6 +199,14 @@ void Game::checkWin() {
 }
 
 void Game::win() {
+	won_ = true;
+	for (int i = 0; i < getRows(); ++i) {
+		for (int j = 0; j < getCols(); ++j) {
+			if (!cells_[i][j].clicked()) {
+				cells_[i][j].setCellValue(fg_value::FLAG);
+			}
+		}
+	}
 	printf("YOU WINNNNNNNNNNNNNNNNNNNNNN\n");
 }
 
@@ -227,7 +237,7 @@ void Game::renderBoard() {
 	for (int i = 0; i < getRows(); ++i) {
 		for (int j = 0; j < getCols(); ++j) {
 			window.render(cell(i, j).renderBgRectInfo(), cell(i, j).getBgTex());
-			if (cell(i, j).fgShown()) {
+			if (cell(i, j).fgShown() || won_) {
 				window.render(cell(i, j).renderFgRectInfo(), cell(i, j).getFgTex());
 			}
 		}
