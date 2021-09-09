@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 	Game game(8, 8, 10);
 #endif
 
-	Button restart_button({SCREEN_WIDTH / 2 - 64.0f, 35}, {0, 0, 1024, 1024}, {0, 0, 1024, 1024}, nullptr, awesome, game, &Game::restart);
+	Button restart_button({SCREEN_WIDTH / 2 - 64.0f, 5}, {0, 0, 1024, 1024}, {0, 0, 1024, 1024}, nullptr, awesome, game, &Game::restart);
 	restart_button.setScale(0.125f);
 	buttons.push_back(&restart_button);
 
@@ -97,7 +97,8 @@ int main(int argc, char* argv[]) {
 							#else
 								game.setBoard(8, 8, 10);
 							#endif
-							game.setCellScale(0.75f);
+							game.setCellScale(1.0f);
+							game.setYOffset(BEGINNER_OFFSET);
 							game.initBoard();
 							game.generateBoard();
 							break;
@@ -109,6 +110,7 @@ int main(int argc, char* argv[]) {
 								game.setBoard(16, 16, 40);
 							#endif
 							game.setCellScale(0.6f);
+							game.setYOffset(MEDIUM_OFFSET);
 							game.initBoard();
 							game.generateBoard();
 							break;
@@ -120,6 +122,7 @@ int main(int argc, char* argv[]) {
 								game.setBoard(16, 30, 99);
 							#endif
 							game.setCellScale(0.5f);
+							game.setYOffset(EXPERT_OFFSET);
 							game.initBoard();
 							game.generateBoard();
 							break;

@@ -2,6 +2,9 @@
 #include "RenderWindow.hpp"
 
 extern float cell_scale;
+constexpr int BEGINNER_OFFSET = 50;
+constexpr int MEDIUM_OFFSET = 60;
+constexpr int EXPERT_OFFSET = 50;
 
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
