@@ -1,7 +1,7 @@
 #pragma once
 
 //gameplay variables
-constexpr int NUM_MINES = 0;
+constexpr int NUM_MINES = 10;
 
 //system variables
 constexpr int SCREEN_WIDTH = 640;

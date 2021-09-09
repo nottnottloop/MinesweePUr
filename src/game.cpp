@@ -127,16 +127,21 @@ void Game::revealNeighbours(int row, int col) {
 		bool popped_currently_checking = false;
 		for (int i = -1; i < 2; ++i) {
 			for (int j = -1; j < 2; ++j) {
+				//continue if we would go out of bounds
 				if ((i == 0 && j == 0) || !cellRefPossible(check_row + i, check_col + j)) {
 					continue;
 				}
+				//only queue cells that aren't mines and aren't already clicked
 				if (cells_[check_row + i][check_col + j].getValue() != fg_value::MINE && !cells_[check_row + i][check_col + j].fgShown()) {
 					if (!popped_currently_checking) {
 						check_queue.pop_back();
 						printf("Popping %d, %d\n", check_row, check_col);
 						popped_currently_checking = true;
 					}
-					check_queue.push_back(std::pair<int, int>(check_row + i, check_col + j));
+					//don't queue tiles with numbers in them
+					if (cells_[check_row + i][check_col + j].getValue() == fg_value::NONE) {
+						check_queue.push_back(std::pair<int, int>(check_row + i, check_col + j));
+					}
 					cells_[check_row + i][check_col + j].leftClick();
 					printf("Revealing %d, %d\n", check_row + i, check_col + j);
 					continue;
