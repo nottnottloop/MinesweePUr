@@ -9,8 +9,9 @@ public:
 	Game();
 	void initBoard();
 	void generateBoard();
-	int checkNeighbourMines(int row, int col);
-	void revealNeighbours();
+	bool cellRefPossible(int row, int col);
+	fg_value determineCellValue(int row, int col);
+	void revealNeighbours(int row, int col);
 	void checkCellClick(Sint32 x, Sint32, bool right_mouse);
 	Cell& cell(int i, int j);
 private:

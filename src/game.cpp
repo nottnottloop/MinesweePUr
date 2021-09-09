@@ -1,5 +1,8 @@
 #include <SDL.h>
 #include <random>
+#include <vector>
+#include <array>
+#include <utility>
 #include "Game.hpp"
 #include "Constants.hpp"
 #include "Cell.hpp"
@@ -44,20 +47,24 @@ void Game::generateBoard() {
 	//numbers
 	for (int row = 0; row < 8; ++row) {
 		for (int col = 0; col < 8; ++col) {
-			if (cells_[row][col].getValue() == fg_value::MINE) {
-				continue;
-			}
-			int neighbour_mines = checkNeighbourMines(row, col);
-			if (neighbour_mines == 0) {
-				cells_[row][col].setCellValue(fg_value::NONE);
-			} else {
-				cells_[row][col].setCellValue(static_cast<fg_value>(neighbour_mines - 1));
-			}
+			fg_value neighbour_mines = determineCellValue(row, col);
+			cells_[row][col].setCellValue(neighbour_mines);
 		}
 	}
 }
 
-int Game::checkNeighbourMines(int row, int col) {
+bool Game::cellRefPossible(int row, int col) {
+	if (col < 0 || col > 7 || row < 0 || row > 7) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+fg_value Game::determineCellValue(int row, int col) {
+	if (cells_[row][col].getValue() == fg_value::MINE) {
+		return fg_value::MINE;
+	}
 	int neighbour_mines = 0;
 	//left
 	if (col - 1 >= 0) {
@@ -93,11 +100,21 @@ int Game::checkNeighbourMines(int row, int col) {
 			}
 		}
 	}
-	return neighbour_mines;
+	if (neighbour_mines == 0) {
+		return fg_value::NONE;
+	}
+	//we subtract one from neighbour_mines because the enum doesn't cast perfectly
+	return static_cast<fg_value>(neighbour_mines - 1);
 }
 
-void Game::revealNeighbours() {
-	
+void Game::revealNeighbours(int row, int col) {
+	std::vector<std::pair<int, int>> check_queue;
+	check_queue.push_back(std::pair<int, int>(row, col));
+	//while (!check_queue.empty()) {
+	//	if (determineCellValue(check_queue.back().first, check_queue.back().second) != fg_value::MINE) {
+			
+	//	}
+	//}
 }
 
 void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
@@ -107,8 +124,9 @@ void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
 				if (cells_[row][col].getPos().y < y && cells_[row][col].getPos().y + 64.0f * CELL_SCALE > y) {
 					if (right_mouse) {
 						cells_[row][col].rightClick();
-					} else {
+					} else if (!cells_[row][col].fgShown()) {
 						cells_[row][col].leftClick();
+						revealNeighbours(row, col);
 					}
 				}
 			}
