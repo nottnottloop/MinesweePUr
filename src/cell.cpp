@@ -1,8 +1,8 @@
 #include "Cell.hpp"
 #include "Constants.hpp"
 
-Cell::Cell(Vector2f pos, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg)
-: Entity(pos, bg_frame, fg_frame, bg, fg) {
+Cell::Cell(Vector2f pos, Vector2f offset, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg)
+: Entity(pos, offset, bg_frame, fg_frame, bg, fg) {
 	setScale(cell_scale);
 	setCellValue(fg_value::NONE);
 	clicked_ = false;

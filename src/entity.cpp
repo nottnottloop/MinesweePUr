@@ -3,8 +3,8 @@
 #include <tuple>
 #include "Entity.hpp"
 
-Entity::Entity(Vector2f pos, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg)
-:pos_(pos), offset_({0.0f, 0.0f}), bg_frame_(bg_frame), fg_frame_(fg_frame), bg_tex_(bg), fg_tex_(fg), scale_(1), clickable_(true), visible_(true) {
+Entity::Entity(Vector2f pos, Vector2f offset, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg)
+:pos_(pos), offset_(offset), bg_frame_(bg_frame), fg_frame_(fg_frame), bg_tex_(bg), fg_tex_(fg), scale_(1), clickable_(true), visible_(true) {
 
 }
 

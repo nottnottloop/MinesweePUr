@@ -11,8 +11,7 @@ public:
 	int getCols();
 	int getMines();
 	void setCellScale(float scale);
-	void setXOffset(int x);
-	void setYOffset(int y);
+	void setOffset(Vector2f offset);
 	void setBoard(int rows, int cols, int mines);
 	void restart();
 	void clearBoard();
@@ -31,11 +30,10 @@ public:
 	void renderBoard();
 	void renderButtons();
 private:
+	Vector2f offset_;
 	int board_rows_;
 	int board_cols_;
 	int mines_;
-	int x_offset_;
-	int y_offset_;
 	bool won_;
 	bool lost_;
 	std::vector<std::vector<Cell>> cells_;

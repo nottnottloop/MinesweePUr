@@ -15,7 +15,7 @@ float center_y;
 float cell_scale = 1.0f;
 
 Game::Game(int rows, int cols, int mines) 
-: board_rows_(rows), board_cols_(cols), lost_(false), won_(false), mines_(mines), x_offset_(0), y_offset_(BEGINNER_OFFSET) {
+: board_rows_(rows), board_cols_(cols), lost_(false), won_(false), mines_(mines), offset_({0, BEGINNER_OFFSET}) {
 	initBoard();
 	generateBoard();
 }
@@ -36,12 +36,8 @@ void Game::setCellScale(float scale) {
 	cell_scale = scale;
 }
 
-void Game::setXOffset(int x) {
-	x_offset_ = x;
-}
-
-void Game::setYOffset(int y) {
-	y_offset_ = y;
+void Game::setOffset(Vector2f offset) {
+	offset_ = offset;
 }
 
 void Game::setBoard(int rows, int cols, int mines) {
@@ -77,7 +73,7 @@ void Game::initBoard() {
 
 	for (int i = 0; i < getRows(); ++i) {
 		for (int j = 0; j < getCols(); ++j) {
-			cells_[i].emplace_back(Cell({(center_x + 60.0f * cell_scale * j) + x_offset_, (center_y + 60.0f * cell_scale * i) + y_offset_}, {0, 0, 60, 60}, {0, 0, 60, 60}, bg, fg));
+			cells_[i].emplace_back(Cell({center_x + offset_.x + 60.0f * cell_scale * j, center_y + offset_.y + 60.0f * cell_scale * i}, {0, 0}, {0, 0, 60, 60}, {0, 0, 60, 60}, bg, fg));
 		}
 	}
 }
