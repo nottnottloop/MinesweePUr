@@ -24,6 +24,7 @@ public:
 	fg_value determineCellValue(int row, int col);
 	int checkNeighbours(int row, int col, fg_value val);
 	void revealNeighbours(int row, int col);
+	int getRemaining();
 	void checkLose(int row, int col);
 	void lose();
 	void checkWin();

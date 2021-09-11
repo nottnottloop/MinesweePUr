@@ -220,6 +220,19 @@ void Game::revealNeighbours(int row, int col) {
 	}
 }
 
+int Game::getRemaining() {
+	int mines = getMines();
+	for (int i = 0; i < getRows(); ++i) {
+		for (int j = 0; j < getCols(); ++j) {
+			if (cells_[i][j].flagged()) {
+				//going below 0 is intentional behaviour
+				--mines;
+			}
+		}
+	}
+	return mines;
+}
+
 void Game::checkLose(int row, int col) {
 	if (cells_[row][col].getValue() == fg_value::MINE) {
 		lose();

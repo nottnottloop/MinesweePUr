@@ -73,3 +73,7 @@ bool Cell::fgShown() {
 bool Cell::clicked() {
 	return clicked_;
 }
+
+bool Cell::flagged() {
+	return flagged_;
+}

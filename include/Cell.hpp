@@ -17,6 +17,7 @@ public:
 	void rightClick();
 	bool fgShown();
 	bool clicked();
+	bool flagged();
 private:
 	fg_value cell_value_;
 	bool clicked_;

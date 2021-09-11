@@ -14,12 +14,15 @@
 #include "Button.hpp"
 #include "Text.hpp"
 
-SDL_Color red = {255, 0, 0};
-SDL_Color green = {0, 255, 0};
-SDL_Color blue = {0, 0, 255};
-SDL_Color cyan = {0, 255, 255};
-SDL_Color white = {255, 255, 255};
-SDL_Color black = {0, 0, 0};
+SDL_Color RED = {255, 0, 0};
+SDL_Color GREEN = {0, 255, 0};
+SDL_Color BLUE = {0, 0, 255};
+SDL_Color CYAN = {0, 255, 255};
+SDL_Color PEACH = {255, 229, 180};
+SDL_Color PURPLE = {128, 0, 128};
+SDL_Color ORANGE_RED = {255, 69, 0};
+SDL_Color WHITE = {255, 255, 255};
+SDL_Color BLACK = {0, 0, 0};
 
 //int SCREEN_WIDTH = 640;
 //int SCREEN_HEIGHT = 480;
@@ -35,17 +38,23 @@ SDL_Texture* fg = window.loadTexture("res/fg.png");
 SDL_Texture* awesome = window.loadTexture("res/awesome.png");
 SDL_Texture* vol = window.loadTexture("res/vol.png");
 
-Text text({650, 40}, {0, 0});
+Text text({650, 40}, {0, 0}, 75);
+Text mines_remaining_text({80, 75}, {0, 0}, 50);
+//Remaining: 99
+char mines_remaining_text_chars[30] = {};
+Text timer_text({225, 5}, {0, 0}, 60);
+//Time: 000
+char timer_text_chars[30] = {};
 
 Mix_Chunk* click;
 Mix_Chunk* kaboom;
 Mix_Chunk* hellyeah;
 std::vector<Button*> buttons;
 
-void switchLevel(int level, Game& game, Text& text, Button& restart_button) {
+void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, Text& timer_text, Button& restart_button) {
 	switch (level) {
 		case 1:
-			text.loadFontTexture(FONT_LOCATION, FONT_SIZE, green, "Beginner");
+			text.loadFontTexture(GREEN, "Beginner");
 			text.setOffset({0, 0});
 			game.clearBoard();
 			#ifdef DEBUG_MINES
@@ -60,7 +69,7 @@ void switchLevel(int level, Game& game, Text& text, Button& restart_button) {
 			game.generateBoard();
 			break;
 		case 2:
-			text.loadFontTexture(FONT_LOCATION, FONT_SIZE, cyan, "Medium");
+			text.loadFontTexture(CYAN, "Medium");
 			text.setOffset({0, -10});
 			game.clearBoard();
 			#ifdef DEBUG_MINES
@@ -75,7 +84,7 @@ void switchLevel(int level, Game& game, Text& text, Button& restart_button) {
 			game.generateBoard();
 			break;
 		case 3:
-			text.loadFontTexture(FONT_LOCATION, FONT_SIZE, red, "Expert");
+			text.loadFontTexture(RED, "Expert");
 			text.setOffset({0, -10});
 			game.clearBoard();
 			#ifdef DEBUG_MINES
@@ -100,13 +109,13 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 					buttons[i]->rightClick();
 					//it's like i went to Italy and had an extra large serving
 					if (i < 5 && i > 1) {
-						switchLevel(i - 1, game, text, restart_button);
+						switchLevel(i - 1, game, text, mines_remaining_text, timer_text, restart_button);
 					}
 				} else {
 					buttons[i]->leftClick();
 					//it's like i went to Italy and had an extra large serving
 					if (i < 5 && i > 1) {
-						switchLevel(i - 1, game, text, restart_button);
+						switchLevel(i - 1, game, text, mines_remaining_text, timer_text, restart_button);
 					}
 				}
 			}
@@ -130,7 +139,7 @@ int main(int argc, char* argv[]) {
 
 	int flags = MIX_INIT_OGG;
 	int initted = Mix_Init(flags);
-	if(initted & flags != flags) {
+	if((initted & flags) != flags) {
 			printf("Mix_Init: Failed to init required ogg and mod support!\n");
 			printf("Mix_Init: %s\n", Mix_GetError());
 	}
@@ -157,6 +166,10 @@ int main(int argc, char* argv[]) {
 	kaboom = Mix_LoadWAV("res/kaboom.ogg");
 	hellyeah = Mix_LoadWAV("res/hellyeah.ogg");
 
+	text.openFont(FONT_LOCATION, text.getSize());
+	mines_remaining_text.openFont(FONT_LOCATION, mines_remaining_text.getSize());
+	timer_text.openFont(FONT_LOCATION, timer_text.getSize());
+
 	bool quit = false;
 	SDL_Event event;
 
@@ -164,10 +177,10 @@ int main(int argc, char* argv[]) {
 	window.clear();
 	window.display();
 	window.showWindow();
-	text.loadFontTexture(FONT_LOCATION, FONT_SIZE, green, "Beginner");
+	text.loadFontTexture(GREEN, "Beginner");
 
 	//set the game to beginner on startup
-	switchLevel(1, game, text, restart_button);
+	switchLevel(1, game, text, mines_remaining_text, timer_text, restart_button);
 
 	while (!quit) {
 		while (SDL_PollEvent(&event)) {
@@ -193,17 +206,18 @@ int main(int argc, char* argv[]) {
 							game.restart();
 							break;
 						case SDLK_1:
-							switchLevel(1, game, text, restart_button);
+							switchLevel(1, game, text, mines_remaining_text, timer_text, restart_button);
 							break;
 						case SDLK_2:
-							switchLevel(2, game, text, restart_button);
+							switchLevel(2, game, text, mines_remaining_text, timer_text, restart_button);
 							break;
 						case SDLK_3:
-							switchLevel(3, game, text, restart_button);
+							switchLevel(3, game, text, mines_remaining_text, timer_text, restart_button);
 							break;
 					}
 			}
 		}
+		//begin render loop
 		for (int i = 0; i < buttons.size(); ++i) {
 			//this isn't great, but we live and learn
 			if (i == 1 && game.getMute()) {
@@ -215,6 +229,12 @@ int main(int argc, char* argv[]) {
 			window.render(buttons[i]->renderFgRectInfo(), buttons[i]->getFgTex());
 		}
 		window.render(text);
+		sprintf_s(mines_remaining_text_chars, "Remaining: %d", game.getRemaining());
+		mines_remaining_text.loadFontTexture(PEACH, mines_remaining_text_chars);
+		window.render(mines_remaining_text);
+		//sprintf_s(timer_text_chars, "Time: %d", );
+		timer_text.loadFontTexture(ORANGE_RED, timer_text_chars);
+		window.render(timer_text);
 		game.renderBoard();
 		window.display();
 		window.clear();

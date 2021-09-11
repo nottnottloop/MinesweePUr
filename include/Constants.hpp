@@ -8,7 +8,6 @@ constexpr int MEDIUM_OFFSET = 60;
 constexpr int EXPERT_OFFSET = 20;
 
 constexpr char* FONT_LOCATION = "res/fixedsys.ttf";
-constexpr int FONT_SIZE = 75;
 
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
