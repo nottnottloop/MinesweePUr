@@ -37,12 +37,16 @@ void RenderWindow::cleanUp() {
 }
 
 void RenderWindow::clear() {
-	SDL_SetRenderDrawColor(renderer_, 12, 67, 114, 0xFF);        
 	SDL_RenderClear(renderer_);
 }
 
 void RenderWindow::clear(int r, int g, int b, int a) {
 	SDL_SetRenderDrawColor(renderer_, r, g, b, a);        
+	SDL_RenderClear(renderer_);
+}
+
+void RenderWindow::clear(SDL_Color color, int a) {
+	SDL_SetRenderDrawColor(renderer_, color.r, color.g, color.b, a);        
 	SDL_RenderClear(renderer_);
 }
 

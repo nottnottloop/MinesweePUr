@@ -14,15 +14,8 @@
 #include "Button.hpp"
 #include "Text.hpp"
 
-SDL_Color RED = {255, 0, 0};
-SDL_Color GREEN = {0, 255, 0};
-SDL_Color BLUE = {0, 0, 255};
-SDL_Color CYAN = {0, 255, 255};
-SDL_Color PEACH = {255, 229, 180};
-SDL_Color PURPLE = {128, 0, 128};
-SDL_Color ORANGE_RED = {255, 69, 0};
-SDL_Color WHITE = {255, 255, 255};
-SDL_Color BLACK = {0, 0, 0};
+std::vector<SDL_Color> COLOR_VECTOR = {NEW_BACKGROUND, CLASSIC_BACKGROUND, {8, 141, 165}, RED, GREEN, BLUE, CYAN, PEACH, PURPLE, ORANGE_RED, WHITE, BLACK};
+//std::vector<SDL_Color> COLOR_VECTOR = {CLASSIC_BACKGROUND, {8, 141, 165}, {64, 114, 148}};
 
 //int SCREEN_WIDTH = 640;
 //int SCREEN_HEIGHT = 480;
@@ -32,6 +25,9 @@ int SCREEN_HEIGHT = 768;
 //DEBUG
 //#define DEBUG_MINES 1
 
+Uint32 start_time;
+Uint32 current_time;
+
 RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 SDL_Texture* bg = window.loadTexture("res/bg.png");
 SDL_Texture* fg = window.loadTexture("res/fg.png");
@@ -39,10 +35,10 @@ SDL_Texture* awesome = window.loadTexture("res/awesome.png");
 SDL_Texture* vol = window.loadTexture("res/vol.png");
 
 Text text({650, 40}, {0, 0}, 75);
-Text mines_remaining_text({80, 75}, {0, 0}, 50);
+Text mines_remaining_text({10, 75}, {0, 0}, 62);
 //Remaining: 99
 char mines_remaining_text_chars[30] = {};
-Text timer_text({225, 5}, {0, 0}, 60);
+Text timer_text({195, 3}, {0, 0}, 55);
 //Time: 000
 char timer_text_chars[30] = {};
 
@@ -51,7 +47,11 @@ Mix_Chunk* kaboom;
 Mix_Chunk* hellyeah;
 std::vector<Button*> buttons;
 
+int current_level = 1;
+int current_bg_color = 0;
+
 void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, Text& timer_text, Button& restart_button) {
+	start_time = SDL_GetTicks();
 	switch (level) {
 		case 1:
 			text.loadFontTexture(GREEN, "Beginner");
@@ -108,12 +108,18 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 				if (right_mouse) {
 					buttons[i]->rightClick();
 					//it's like i went to Italy and had an extra large serving
+					if (i == 0) {
+						switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
+					}
 					if (i < 5 && i > 1) {
 						switchLevel(i - 1, game, text, mines_remaining_text, timer_text, restart_button);
 					}
 				} else {
 					buttons[i]->leftClick();
 					//it's like i went to Italy and had an extra large serving
+					if (i == 0) {
+						switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
+					}
 					if (i < 5 && i > 1) {
 						switchLevel(i - 1, game, text, mines_remaining_text, timer_text, restart_button);
 					}
@@ -203,7 +209,14 @@ int main(int argc, char* argv[]) {
 				case SDL_KEYDOWN:
 					switch (event.key.keysym.sym) {
 						case SDLK_r:
-							game.restart();
+							switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
+							break;
+						case SDLK_c:
+							if (current_bg_color < COLOR_VECTOR.size() - 1) {
+								++current_bg_color;
+							} else {
+								current_bg_color = 0;
+							}
 							break;
 						case SDLK_1:
 							switchLevel(1, game, text, mines_remaining_text, timer_text, restart_button);
@@ -217,6 +230,9 @@ int main(int argc, char* argv[]) {
 					}
 			}
 		}
+		//get time for time elapsed in game
+		current_time = SDL_GetTicks();
+
 		//begin render loop
 		for (int i = 0; i < buttons.size(); ++i) {
 			//this isn't great, but we live and learn
@@ -228,16 +244,26 @@ int main(int argc, char* argv[]) {
 			window.render(buttons[i]->renderBgRectInfo(), buttons[i]->getBgTex());
 			window.render(buttons[i]->renderFgRectInfo(), buttons[i]->getFgTex());
 		}
+		//beginner, medium, expert
 		window.render(text);
 		sprintf_s(mines_remaining_text_chars, "Remaining: %d", game.getRemaining());
+
+		//remaining:
 		mines_remaining_text.loadFontTexture(PEACH, mines_remaining_text_chars);
 		window.render(mines_remaining_text);
-		//sprintf_s(timer_text_chars, "Time: %d", );
+
+		//time:
+		int time_elapsed = (current_time - start_time) / 1000;
+		if (time_elapsed < 999) {
+			sprintf_s(timer_text_chars, "Time: %03d", time_elapsed);
+		} else {
+			sprintf_s(timer_text_chars, "Time: 999");
+		}
 		timer_text.loadFontTexture(ORANGE_RED, timer_text_chars);
 		window.render(timer_text);
 		game.renderBoard();
 		window.display();
-		window.clear();
+		window.clear(COLOR_VECTOR[current_bg_color], 0xFF);
 		window.showWindow();
 	}
 
