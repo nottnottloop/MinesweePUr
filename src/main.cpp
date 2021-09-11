@@ -3,6 +3,7 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <array>
 
@@ -49,6 +50,41 @@ std::vector<Button*> buttons;
 
 int current_level = 1;
 int current_bg_color = 0;
+
+struct Score {
+	char name[20];
+	int score;
+};
+
+void initHighScore() {
+	std::ofstream file("highscore.bin");
+	Score score_array[5];
+	for (int i = 0; i < 5; ++i) {
+		strcpy_s(score_array[i].name, "Anonymous");
+		score_array[i].score = 999;
+	}
+	file.write(reinterpret_cast<char*>(&score_array), sizeof(score_array));
+}
+
+int loadHighScore() {
+	std::ifstream file("highscore.bin");
+	Score score_array[5];
+	for (int i = 0; i < 5; ++i) {
+		file.read(reinterpret_cast<char*>(&score_array[i]), sizeof(Score));
+	}
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "yooooo", "hello\nhowdy\nsup", NULL);
+	file.close();
+	return 0;
+}
+
+void saveHighScore(char* name, int val) {
+	std::fstream file("highscore.bin");
+	Score score_array[5];
+	for (int i = 0; i < 5; ++i) {
+		file.write(reinterpret_cast<char*>(&score_array[i]), sizeof(Score));
+	}
+	file.close();
+}
 
 void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, Text& timer_text, Button& restart_button) {
 	start_time = SDL_GetTicks();
@@ -131,6 +167,9 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 
 
 int main(int argc, char* argv[]) {
+	saveHighScore("Andrew", 5);
+	loadHighScore();
+	return 0;
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
 		std::cout << "SDL_Init has failed. sdl_error: " << SDL_GetError() << "\n";
 
