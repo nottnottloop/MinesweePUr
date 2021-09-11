@@ -15,6 +15,12 @@ float center_x;
 float center_y;
 float cell_scale = 1.0f;
 
+Game::Game() 
+: board_rows_(0), board_cols_(0), lost_(false), won_(false), mines_(0), offset_({0, BEGINNER_OFFSET}), muted_(false) {
+	initBoard();
+	generateBoard();
+}
+
 Game::Game(int rows, int cols, int mines) 
 : board_rows_(rows), board_cols_(cols), lost_(false), won_(false), mines_(mines), offset_({0, BEGINNER_OFFSET}), muted_(false) {
 	initBoard();

@@ -6,6 +6,7 @@
 
 class Game {
 public:
+	Game();
 	Game(int rows, int cols, int mines);
 	int getRows();
 	int getCols();

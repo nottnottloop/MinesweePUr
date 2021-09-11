@@ -49,13 +49,13 @@ void switchLevel(int level, Game& game, Text& text, Button& restart_button) {
 			text.setOffset({0, 0});
 			game.clearBoard();
 			#ifdef DEBUG_MINES
-				game.setBoard(8, 8, DEBUG_MINES);
+				game.setBoard(9, 9, DEBUG_MINES);
 			#else
-				game.setBoard(8, 8, 10);
+				game.setBoard(9, 9, 10);
 			#endif
 			restart_button.setOffset({0, 15});
 			game.setCellScale(1.0f);
-			game.setOffset({0, BEGINNER_OFFSET});
+			game.setOffset({-30, 20});
 			game.initBoard();
 			game.generateBoard();
 			break;
@@ -70,7 +70,7 @@ void switchLevel(int level, Game& game, Text& text, Button& restart_button) {
 			#endif
 			restart_button.setOffset({0, 5});
 			game.setCellScale(0.6f);
-			game.setOffset({0, MEDIUM_OFFSET});
+			game.setOffset({0, 60});
 			game.initBoard();
 			game.generateBoard();
 			break;
@@ -85,7 +85,7 @@ void switchLevel(int level, Game& game, Text& text, Button& restart_button) {
 			#endif
 			restart_button.setOffset({0, 5});
 			game.setCellScale(0.5f);
-			game.setOffset({0, EXPERT_OFFSET});
+			game.setOffset({0, 20});
 			game.initBoard();
 			game.generateBoard();
 			break;
@@ -135,11 +135,7 @@ int main(int argc, char* argv[]) {
 			printf("Mix_Init: %s\n", Mix_GetError());
 	}
 
-#ifdef DEBUG_MINES
-	Game game(8, 8, DEBUG_MINES);
-#else
-	Game game(8, 8, 10);
-#endif
+	Game game;
 
 	Button restart_button({SCREEN_WIDTH / 2 - 64.0f, 0}, {0, 15}, {0, 0, 1024, 1024}, {0, 0, 1024, 1024}, nullptr, awesome, game, &Game::restart);
 	restart_button.setScale(0.125f);
@@ -169,6 +165,9 @@ int main(int argc, char* argv[]) {
 	window.display();
 	window.showWindow();
 	text.loadFontTexture(FONT_LOCATION, FONT_SIZE, green, "Beginner");
+
+	//set the game to beginner on startup
+	switchLevel(1, game, text, restart_button);
 
 	while (!quit) {
 		while (SDL_PollEvent(&event)) {
