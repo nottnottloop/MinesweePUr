@@ -64,24 +64,54 @@ void initHighScore() {
 		score_array[i].score = 999;
 	}
 	file.write(reinterpret_cast<char*>(&score_array), sizeof(score_array));
+	file.close();
 }
 
 int loadHighScore() {
 	std::ifstream file("highscore.bin");
 	Score score_array[5];
+	file.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
+	char score_chars[100] = {};
 	for (int i = 0; i < 5; ++i) {
-		file.read(reinterpret_cast<char*>(&score_array[i]), sizeof(Score));
+		char temp[20];
+		sprintf_s(temp, "%d. %s, %d\n", i + 1, score_array[i].name, score_array[i].score);
+		strcat_s(score_chars, temp);
 	}
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "yooooo", "hello\nhowdy\nsup", NULL);
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Highscores", score_chars, nullptr);
 	file.close();
 	return 0;
 }
 
-void saveHighScore(char* name, int val) {
-	std::fstream file("highscore.bin");
+void saveHighScore(char name[20], int val) {
+	std::ifstream ifile("highscore.bin");
 	Score score_array[5];
+	ifile.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
+
+	Score new_score_array[5];
+	memcpy_s(new_score_array, sizeof(new_score_array), score_array, sizeof(score_array));
+
+	ifile.close();
+	std::ofstream file("highscore.bin", std::ios::trunc);
+
+	//int top_score = 999;
+	//int top_score_index = 5;
+	bool file_changed = false;
 	for (int i = 0; i < 5; ++i) {
-		file.write(reinterpret_cast<char*>(&score_array[i]), sizeof(Score));
+		if (score_array[i].score > val) {
+			file_changed = true;
+			//Score insert;
+			//strcpy_s(insert.name, name);
+			//insert.score = val;
+			strcpy_s(new_score_array[i].name, name);
+			new_score_array[i].score = val;
+			//top_score = score_array[i].score;
+			//top_score_index = i;
+			//memcpy_s(new_score_array + i + 1, sizeof(new_score_array - (i * sizeof(Score))), score_array + i + 1, sizeof(score_array - (i * sizeof(Score))));
+			break;
+		}
+	}
+	if (file_changed) {
+		file.write(reinterpret_cast<char*>(&new_score_array), sizeof(new_score_array));
 	}
 	file.close();
 }
@@ -167,6 +197,7 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 
 
 int main(int argc, char* argv[]) {
+	initHighScore();
 	saveHighScore("Andrew", 5);
 	loadHighScore();
 	return 0;
