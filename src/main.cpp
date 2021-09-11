@@ -93,24 +93,24 @@ void saveHighScore(char name[20], int val) {
 	ifile.close();
 	std::ofstream file("highscore.bin", std::ios::trunc);
 
-	//int top_score = 999;
-	//int top_score_index = 5;
-	bool file_changed = false;
+	bool inserted = false;
+	std::vector<Score> queue;
 	for (int i = 0; i < 5; ++i) {
-		if (score_array[i].score > val) {
-			file_changed = true;
-			//Score insert;
-			//strcpy_s(insert.name, name);
-			//insert.score = val;
-			strcpy_s(new_score_array[i].name, name);
-			new_score_array[i].score = val;
-			//top_score = score_array[i].score;
-			//top_score_index = i;
-			//memcpy_s(new_score_array + i + 1, sizeof(new_score_array - (i * sizeof(Score))), score_array + i + 1, sizeof(score_array - (i * sizeof(Score))));
-			break;
+		if (val < score_array[i].score && !inserted) {
+			inserted = true;
+			Score temp;
+			strcpy_s(temp.name, name);
+			temp.score = val;
+			queue.push_back(temp);
 		}
+		queue.push_back(score_array[i]);
 	}
-	if (file_changed) {
+	
+	if (inserted) {
+		for (int i = 0; i < 5; ++i) {
+			strcpy_s(new_score_array[i].name, queue[i].name);
+			new_score_array[i].score = queue[i].score;
+		}
 		file.write(reinterpret_cast<char*>(&new_score_array), sizeof(new_score_array));
 	}
 	file.close();
@@ -199,6 +199,8 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 int main(int argc, char* argv[]) {
 	initHighScore();
 	saveHighScore("Andrew", 5);
+	saveHighScore("Billy", 22);
+	saveHighScore("john", 3);
 	loadHighScore();
 	return 0;
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
