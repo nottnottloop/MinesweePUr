@@ -28,6 +28,7 @@ public:
 	void checkLose(int row, int col);
 	void lose();
 	void checkWin();
+	bool getWin();
 	void win();
 	void checkCellClick(Sint32 x, Sint32, bool right_mouse);
 	Cell& cell(int i, int j);

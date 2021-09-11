@@ -24,7 +24,7 @@ int SCREEN_WIDTH = 1024;
 int SCREEN_HEIGHT = 768;
 
 //DEBUG
-//#define DEBUG_MINES 1
+#define DEBUG_MINES 1
 
 Uint32 start_time;
 Uint32 current_time;
@@ -57,17 +57,21 @@ struct Score {
 };
 
 void initHighScore() {
-	std::ofstream file("highscore.bin");
-	Score score_array[5];
-	for (int i = 0; i < 5; ++i) {
-		strcpy_s(score_array[i].name, "Anonymous");
-		score_array[i].score = 999;
+	std::ifstream ifile("highscore.bin");
+	if (!ifile.is_open()) {
+		std::ofstream file("highscore.bin");
+		Score score_array[5];
+		for (int i = 0; i < 5; ++i) {
+			strcpy_s(score_array[i].name, "Anonymous");
+			score_array[i].score = 999;
+		}
+		file.write(reinterpret_cast<char*>(&score_array), sizeof(score_array));
+		file.close();
 	}
-	file.write(reinterpret_cast<char*>(&score_array), sizeof(score_array));
-	file.close();
+	ifile.close();
 }
 
-int loadHighScore() {
+void loadHighScore() {
 	std::ifstream file("highscore.bin");
 	Score score_array[5];
 	file.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
@@ -79,10 +83,9 @@ int loadHighScore() {
 	}
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Highscores", score_chars, nullptr);
 	file.close();
-	return 0;
 }
 
-void saveHighScore(char name[20], int val) {
+void addHighScore(char name[20], int val) {
 	std::ifstream ifile("highscore.bin");
 	Score score_array[5];
 	ifile.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
@@ -198,11 +201,6 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 
 int main(int argc, char* argv[]) {
 	initHighScore();
-	saveHighScore("Andrew", 5);
-	saveHighScore("Billy", 22);
-	saveHighScore("john", 3);
-	loadHighScore();
-	return 0;
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
 		std::cout << "SDL_Init has failed. sdl_error: " << SDL_GetError() << "\n";
 
@@ -320,12 +318,13 @@ int main(int argc, char* argv[]) {
 		window.render(text);
 		sprintf_s(mines_remaining_text_chars, "Remaining: %d", game.getRemaining());
 
-		//remaining:
 		mines_remaining_text.loadFontTexture(PEACH, mines_remaining_text_chars);
 		window.render(mines_remaining_text);
 
-		//time:
-		int time_elapsed = (current_time - start_time) / 1000;
+		int time_elapsed;
+		if (!game.getWin()) {
+			time_elapsed = (current_time - start_time) / 1000;
+		}
 		if (time_elapsed < 999) {
 			sprintf_s(timer_text_chars, "Time: %03d", time_elapsed);
 		} else {
