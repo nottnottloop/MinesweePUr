@@ -71,7 +71,7 @@ struct Score {
 };
 
 void addHighScore(char name[30], int val) {
-	std::ifstream ifile("highscore.bin");
+	std::ifstream ifile("highscore.bin", std::ios::binary | std::ios::in);
 	Score score_array[3][5];
 	ifile.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
 
@@ -79,7 +79,7 @@ void addHighScore(char name[30], int val) {
 	memcpy_s(new_score_array, sizeof(new_score_array), score_array, sizeof(score_array));
 
 	ifile.close();
-	std::ofstream file("highscore.bin", std::ios::trunc);
+	std::ofstream file("highscore.bin", std::ios::out | std::ios::trunc);
 
 	bool inserted = false;
 	std::vector<Score> queue;
@@ -127,9 +127,9 @@ void addHighScore(char name[30], int val) {
 }
 
 void initHighScore(bool force = false) {
-	std::ifstream ifile("highscore.bin");
+	std::ifstream ifile("highscore.bin", std::ios::binary | std::ios::in);
 	if (!ifile.is_open() || force) {
-		std::ofstream file("highscore.bin");
+		std::ofstream file("highscore.bin", std::ios::binary | std::ios::trunc);
 		Score score_array[3][5];
 		for (int j = 0; j < 3; ++j) {
 			for (int i = 0; i < 5; ++i) {
@@ -144,7 +144,7 @@ void initHighScore(bool force = false) {
 }
 
 int loadHighScore(bool messagebox) {
-	std::ifstream file("highscore.bin");
+	std::ifstream file("highscore.bin", std::ios::binary | std::ios::in);
 	Score score_array[3][5];
 	file.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
 	char score_chars[300] = {};
