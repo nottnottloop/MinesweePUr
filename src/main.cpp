@@ -182,10 +182,24 @@ int loadHighScore(bool messagebox) {
         }
     };
 
+		char title_buffer[30] = {};
+		switch (current_level) {
+			case 0:
+				strcat_s(title_buffer, "Beginner");
+				break;
+			case 1:
+				strcat_s(title_buffer, "Medium");
+				break;
+			case 2:
+				strcat_s(title_buffer, "Expert");
+				break;
+		}
+		strcat_s(title_buffer, " Highscores!");
+
 		SDL_MessageBoxData message_box_data = {
 				SDL_MESSAGEBOX_INFORMATION, /* .flags */
 				nullptr, /* .window */
-				"Highscores!", /* .title */
+				title_buffer, /* .title */
 				score_chars, /* .message */
 				SDL_arraysize(message_box_buttons), /* .numbuttons */
 				message_box_buttons, /* .buttons */
