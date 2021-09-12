@@ -31,6 +31,8 @@ Uint32 start_time;
 Uint32 current_time;
 
 bool entering_highscore = false;
+int highscore_at_type = 0;
+int highscore_at_loop_enter = 0;
 std::string name_string;
 
 RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -55,22 +57,26 @@ Mix_Chunk* kaboom;
 Mix_Chunk* hellyeah;
 std::vector<Button*> buttons;
 
-int current_level = 1;
+int current_level = 0;
 int current_bg_color = 0;
 
 struct Score {
 	char name[20];
 	int score;
+	int level;
 };
 
 void initHighScore() {
 	std::ifstream ifile("highscore.bin");
 	if (!ifile.is_open()) {
 		std::ofstream file("highscore.bin");
-		Score score_array[5];
-		for (int i = 0; i < 5; ++i) {
-			strcpy_s(score_array[i].name, "Anonymous");
-			score_array[i].score = 999;
+		Score score_array[15];
+		for (int j = 0; i < 3; ++j) {
+			for (int i = 0; i < 5; ++i) {
+				strcpy_s(score_array[i].name, "Anonymous");
+				score_array[i].score = 999;
+				score_array[i].level = j;
+			}
 		}
 		file.write(reinterpret_cast<char*>(&score_array), sizeof(score_array));
 		file.close();
@@ -80,7 +86,7 @@ void initHighScore() {
 
 void loadHighScore() {
 	std::ifstream file("highscore.bin");
-	Score score_array[5];
+	Score score_array[15];
 	file.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
 	char score_chars[100] = {};
 	for (int i = 0; i < 5; ++i) {
@@ -129,7 +135,7 @@ void addHighScore(char name[20], int val) {
 void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, Text& timer_text, Button& restart_button) {
 	start_time = SDL_GetTicks();
 	switch (level) {
-		case 1:
+		case 0:
 			text.loadFontTexture(GREEN, "Beginner");
 			text.setOffset({0, 0});
 			game.clearBoard();
@@ -144,7 +150,7 @@ void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, 
 			game.initBoard();
 			game.generateBoard();
 			break;
-		case 2:
+		case 1:
 			text.loadFontTexture(CYAN, "Medium");
 			text.setOffset({0, -10});
 			game.clearBoard();
@@ -159,7 +165,7 @@ void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, 
 			game.initBoard();
 			game.generateBoard();
 			break;
-		case 3:
+		case 2:
 			text.loadFontTexture(RED, "Expert");
 			text.setOffset({0, -10});
 			game.clearBoard();
@@ -188,7 +194,7 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 						switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
 					}
 					if (i < 5 && i > 1) {
-						switchLevel(i - 1, game, text, mines_remaining_text, timer_text, restart_button);
+						switchLevel(i, game, text, mines_remaining_text, timer_text, restart_button);
 					}
 				} else {
 					buttons[i]->leftClick();
@@ -197,7 +203,7 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 						switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
 					}
 					if (i < 5 && i > 1) {
-						switchLevel(i - 1, game, text, mines_remaining_text, timer_text, restart_button);
+						switchLevel(i, game, text, mines_remaining_text, timer_text, restart_button);
 					}
 				}
 			}
@@ -267,7 +273,7 @@ int main(int argc, char* argv[]) {
 	text.loadFontTexture(GREEN, "Beginner");
 
 	//set the game to beginner on startup
-	switchLevel(1, game, text, mines_remaining_text, timer_text, restart_button);
+	switchLevel(0, game, text, mines_remaining_text, timer_text, restart_button);
 
 	while (!quit) {
 		while (SDL_PollEvent(&event)) {
@@ -328,13 +334,13 @@ int main(int argc, char* argv[]) {
 								}
 								break;
 							case SDLK_1:
-								switchLevel(1, game, text, mines_remaining_text, timer_text, restart_button);
+								switchLevel(0, game, text, mines_remaining_text, timer_text, restart_button);
 								break;
 							case SDLK_2:
-								switchLevel(2, game, text, mines_remaining_text, timer_text, restart_button);
+								switchLevel(1, game, text, mines_remaining_text, timer_text, restart_button);
 								break;
 							case SDLK_3:
-								switchLevel(3, game, text, mines_remaining_text, timer_text, restart_button);
+								switchLevel(2, game, text, mines_remaining_text, timer_text, restart_button);
 								break;
 						}
 					}
@@ -367,6 +373,7 @@ int main(int argc, char* argv[]) {
 				time_elapsed = (current_time - start_time) / 1000;
 			} else {
 				entering_highscore = true;
+				highscore_at_loop_enter++;
 				SDL_StartTextInput();
 			}
 			if (time_elapsed < 999) {

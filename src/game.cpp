@@ -276,6 +276,10 @@ bool Game::getWin() {
 	return won_;
 }
 
+//void Game::setWin(bool win) {
+//	won_ = win;
+//}
+
 void Game::win() {
 	won_ = true;
 	printf("YOU WINNNNNNNNNNNNNNNNNNNNNN\n");
