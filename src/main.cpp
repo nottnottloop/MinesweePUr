@@ -16,7 +16,7 @@
 #include "Button.hpp"
 #include "Text.hpp"
 
-std::vector<SDL_Color> COLOR_VECTOR = {NEW_BACKGROUND, CLASSIC_BACKGROUND, {8, 141, 165}, RED, GREEN, BLUE, CYAN, PEACH, PURPLE, ORANGE_RED, WHITE, BLACK};
+std::vector<SDL_Color> COLOR_VECTOR = {NEW_BACKGROUND, CLASSIC_BACKGROUND, {8, 141, 165}, RED, GREEN, BLUE, CYAN, PEACH, PURPLE, ORANGE_RED, WHITE, BLACK, PASTEL_BLUE, LIME_GREEN};
 //std::vector<SDL_Color> COLOR_VECTOR = {CLASSIC_BACKGROUND, {8, 141, 165}, {64, 114, 148}};
 
 //int SCREEN_WIDTH = 640;
@@ -25,7 +25,8 @@ int SCREEN_WIDTH = 1024;
 int SCREEN_HEIGHT = 768;
 
 //DEBUG
-#define DEBUG_MINES 77 
+//#define DEBUG_MINES 77 
+//#define DEBUG_LEADERBOARD
 
 Uint32 start_time;
 Uint32 current_time;
@@ -434,6 +435,7 @@ int main(int argc, char* argv[]) {
 							case SDLK_h:
 								loadHighScore(true);
 								break;
+							#ifdef DEBUG_LEADERBOARD 
 							case SDLK_5:
 								initHighScore(true);
 								break;
@@ -446,6 +448,7 @@ int main(int argc, char* argv[]) {
 							case SDLK_9:
 								addHighScore("frankie", 22);
 								break;
+							#endif
 							case SDLK_1:
 								switchLevel(0, game, text, mines_remaining_text, timer_text, restart_button);
 								break;
@@ -488,7 +491,7 @@ int main(int argc, char* argv[]) {
 			window.render(text);
 			sprintf_s(mines_remaining_text_chars, "Remaining: %d", game.getRemaining());
 
-			mines_remaining_text.loadFontTexture(PEACH, mines_remaining_text_chars);
+			mines_remaining_text.loadFontTexture(LIME_GREEN, mines_remaining_text_chars);
 			window.render(mines_remaining_text);
 
 			if (!game.getWin()) {

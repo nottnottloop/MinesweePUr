@@ -14,6 +14,8 @@ constexpr SDL_Color PURPLE = {128, 0, 128};
 constexpr SDL_Color ORANGE_RED = {255, 69, 0};
 constexpr SDL_Color WHITE = {255, 255, 255};
 constexpr SDL_Color BLACK = {0, 0, 0};
+constexpr SDL_Color PASTEL_BLUE = {126, 214, 223};
+constexpr SDL_Color LIME_GREEN = {186, 220, 88};
 
 extern float cell_scale;
 constexpr int BEGINNER_OFFSET = 50;
