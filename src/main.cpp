@@ -286,8 +286,8 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 					if (i == 0) {
 						switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
 					} else if (i < 5 && i > 1) {
+						switchLevel(i - 2, game, text, mines_remaining_text, timer_text, restart_button);
 						game.restart();
-						switchLevel(i, game, text, mines_remaining_text, timer_text, restart_button);
 					} else if (i == 5) {
 						loadHighScore(true);
 					}
@@ -297,8 +297,8 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 					if (i == 0) {
 						switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
 					} else if (i < 5 && i > 1) {
+						switchLevel(i - 2, game, text, mines_remaining_text, timer_text, restart_button);
 						game.restart();
-						switchLevel(i, game, text, mines_remaining_text, timer_text, restart_button);
 					} else if (i == 5) {
 						loadHighScore(true);
 					}
