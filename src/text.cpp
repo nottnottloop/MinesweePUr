@@ -18,8 +18,16 @@ void Text::loadFontTexture(SDL_Color color, const char* text) {
 SDL_Rect Text::renderTextInfo() {
 	int tex_w = 0;
 	int tex_h = 0;
-	SDL_QueryTexture(fg_tex_, NULL, NULL, &tex_w, &tex_h);
+	SDL_QueryTexture(fg_tex_, nullptr, nullptr, &tex_w, &tex_h);
 	SDL_Rect dst_rect = { getPos().x, getPos().y, tex_w, tex_h };
+	return dst_rect;
+}
+
+SDL_Rect Text::renderCenteredTextInfo() {
+	int tex_w = 0;
+	int tex_h = 0;
+	SDL_QueryTexture(fg_tex_, nullptr, nullptr, &tex_w, &tex_h);
+	SDL_Rect dst_rect = { getPos().x - tex_w, getPos().y, tex_w, tex_h };
 	return dst_rect;
 }
 

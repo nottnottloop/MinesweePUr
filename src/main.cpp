@@ -48,7 +48,7 @@ Text timer_text({195, 3}, {0, 0}, 55);
 char timer_text_chars[30] = {};
 
 Text new_highscore_text({120, 10}, {0, 0}, 40);
-Text name_text({SCREEN_WIDTH / 2.0f, 50}, {0, 0}, 40);
+Text name_text({SCREEN_WIDTH / 2.0f, (SCREEN_HEIGHT / 2.0f) - 40}, {0, 0}, 100);
 
 Mix_Chunk* click;
 Mix_Chunk* kaboom;
@@ -298,10 +298,17 @@ int main(int argc, char* argv[]) {
 								std::cout << name_string << "\n";
 							} else if (event.key.keysym.sym == SDLK_RETURN && !name_string.empty()) {
 									SDL_StopTextInput();
+									entering_highscore = false;
 									std::cout << name_string << "\n";
 								} else if (name_string.length() < 20) {
 								if (name_string.length() < 20) {
+									//we do this hack because i feel like switch case statements for
+									//sdl were a mistake. i can't properly take in two events at the same time
+									//and for some reason the event.text.text will come with a garbage value
+									//as well as an actual value every time without this hack
+									//:(
 									if (isalnum(event.text.text[0])) {
+										name_text.setOffset({name_text.getOffset().x - 25, 0});
 										name_string += event.text.text;
 									}
 									std::cout << name_string << "\n";
@@ -373,6 +380,7 @@ int main(int argc, char* argv[]) {
 		} else {
 			new_highscore_text.loadFontTexture(WHITE, "New highscore! Enter name below (max 20)");
 			window.render(new_highscore_text);
+			name_text.loadFontTexture(WHITE, name_string.c_str());
 			window.render(name_text);
 		}
 		window.display();

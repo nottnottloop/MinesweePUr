@@ -9,6 +9,7 @@ public:
 	void loadFontTexture(SDL_Color color, const char* text);
 	void openFont(const char* file_path, int size);
 	SDL_Rect Text::renderTextInfo();
+	SDL_Rect Text::renderCenteredTextInfo();
 	void setSize(int size);
 	int getSize();
 private:
