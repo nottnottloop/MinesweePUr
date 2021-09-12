@@ -25,7 +25,7 @@ int SCREEN_WIDTH = 1024;
 int SCREEN_HEIGHT = 768;
 
 //DEBUG
-//#define DEBUG_MINES 1 
+#define DEBUG_MINES 1 
 //#define DEBUG_LEADERBOARD
 
 Uint32 start_time;
@@ -42,6 +42,7 @@ SDL_Texture* bg = window.loadTexture("res/bg.png");
 SDL_Texture* fg = window.loadTexture("res/fg.png");
 SDL_Texture* awesome = window.loadTexture("res/awesome.png");
 SDL_Texture* demoawesome = window.loadTexture("res/demoawesome.png");
+SDL_Texture* sunglassesawesome = window.loadTexture("res/sunglassesawesome.png");
 SDL_Texture* vol = window.loadTexture("res/vol.png");
 SDL_Texture* leaderboard_img = window.loadTexture("res/leaderboard.png");
 
@@ -473,6 +474,10 @@ int main(int argc, char* argv[]) {
 					restart_button.setScale(0.15);
 					restartButtonOffset(current_level, restart_button);
 					restart_button.offset_ = restart_button.offset_ + Vector2f{-14, -22};
+				} else if (i == 0 && game.getWin()) {
+					buttons[0]->setFgTex(sunglassesawesome);
+					restart_button.setScale(0.125f);
+					restartButtonOffset(current_level, restart_button);
 				} else {
 					buttons[0]->setFgTex(awesome);
 					restart_button.setScale(0.125f);
