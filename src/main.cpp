@@ -63,7 +63,6 @@ int current_bg_color = 0;
 struct Score {
 	char name[20];
 	int score;
-	int level;
 };
 
 void initHighScore() {
@@ -71,12 +70,9 @@ void initHighScore() {
 	if (!ifile.is_open()) {
 		std::ofstream file("highscore.bin");
 		Score score_array[15];
-		for (int j = 0; i < 3; ++j) {
-			for (int i = 0; i < 5; ++i) {
-				strcpy_s(score_array[i].name, "Anonymous");
-				score_array[i].score = 999;
-				score_array[i].level = j;
-			}
+		for (int i = 0; i < 5; ++i) {
+			strcpy_s(score_array[i].name, "Anonymous");
+			score_array[i].score = 999;
 		}
 		file.write(reinterpret_cast<char*>(&score_array), sizeof(score_array));
 		file.close();
@@ -332,6 +328,9 @@ int main(int argc, char* argv[]) {
 								} else {
 									current_bg_color = 0;
 								}
+								break;
+							case SDLK_h:
+								loadHighScore();
 								break;
 							case SDLK_1:
 								switchLevel(0, game, text, mines_remaining_text, timer_text, restart_button);
