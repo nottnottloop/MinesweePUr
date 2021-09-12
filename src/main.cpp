@@ -29,6 +29,8 @@ int SCREEN_HEIGHT = 768;
 Uint32 start_time;
 Uint32 current_time;
 
+bool entering_highscore = false;
+
 RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 SDL_Texture* bg = window.loadTexture("res/bg.png");
 SDL_Texture* fg = window.loadTexture("res/fg.png");
@@ -42,6 +44,10 @@ char mines_remaining_text_chars[30] = {};
 Text timer_text({195, 3}, {0, 0}, 55);
 //Time: 000
 char timer_text_chars[30] = {};
+
+Text new_highscore_text({120, 10}, {0, 0}, 40);
+Text name_text({SCREEN_WIDTH / 2.0f, 50}, {0, 0}, 40);
+char name_text_chars[21] = {};
 
 Mix_Chunk* click;
 Mix_Chunk* kaboom;
@@ -245,6 +251,9 @@ int main(int argc, char* argv[]) {
 	text.openFont(FONT_LOCATION, text.getSize());
 	mines_remaining_text.openFont(FONT_LOCATION, mines_remaining_text.getSize());
 	timer_text.openFont(FONT_LOCATION, timer_text.getSize());
+	new_highscore_text.openFont(FONT_LOCATION, new_highscore_text.getSize());
+	name_text.openFont(FONT_LOCATION, name_text.getSize());
+
 
 	bool quit = false;
 	SDL_Event event;
@@ -265,15 +274,17 @@ int main(int argc, char* argv[]) {
 					quit = true;
 					break;
 				case SDL_MOUSEBUTTONDOWN:
-					switch (event.button.button) {
-						case SDL_BUTTON_LEFT:
-							game.checkCellClick(event.button.x, event.button.y, false);
-							checkButtonClick(event.button.x, event.button.y, false, game, text, restart_button);
-							break;
-						case SDL_BUTTON_RIGHT:
-							game.checkCellClick(event.button.x, event.button.y, true);
-							checkButtonClick(event.button.x, event.button.y, true, game,text, restart_button);
-							break;
+					if (!entering_highscore) {
+						switch (event.button.button) {
+							case SDL_BUTTON_LEFT:
+								game.checkCellClick(event.button.x, event.button.y, false);
+								checkButtonClick(event.button.x, event.button.y, false, game, text, restart_button);
+								break;
+							case SDL_BUTTON_RIGHT:
+								game.checkCellClick(event.button.x, event.button.y, true);
+								checkButtonClick(event.button.x, event.button.y, true, game,text, restart_button);
+								break;
+						}
 					}
 				break;
 				case SDL_KEYDOWN:
@@ -300,39 +311,47 @@ int main(int argc, char* argv[]) {
 					}
 			}
 		}
-		//get time for time elapsed in game
-		current_time = SDL_GetTicks();
+		if (!entering_highscore) {
+			//get time for time elapsed in game
+			current_time = SDL_GetTicks();
 
-		//begin render loop
-		for (int i = 0; i < buttons.size(); ++i) {
-			//this isn't great, but we live and learn
-			if (i == 1 && game.getMute()) {
-				buttons[i]->setFgFrame({128, 0, 128, 128});
-			} else if (i == 1) {
-				buttons[i]->setFgFrame({0, 0, 128, 128});
+			//begin render loop
+			for (int i = 0; i < buttons.size(); ++i) {
+				//this isn't great, but we live and learn
+				if (i == 1 && game.getMute()) {
+					buttons[i]->setFgFrame({128, 0, 128, 128});
+				} else if (i == 1) {
+					buttons[i]->setFgFrame({0, 0, 128, 128});
+				}
+				window.render(buttons[i]->renderBgRectInfo(), buttons[i]->getBgTex());
+				window.render(buttons[i]->renderFgRectInfo(), buttons[i]->getFgTex());
 			}
-			window.render(buttons[i]->renderBgRectInfo(), buttons[i]->getBgTex());
-			window.render(buttons[i]->renderFgRectInfo(), buttons[i]->getFgTex());
-		}
-		//beginner, medium, expert
-		window.render(text);
-		sprintf_s(mines_remaining_text_chars, "Remaining: %d", game.getRemaining());
+			//beginner, medium, expert
+			window.render(text);
+			sprintf_s(mines_remaining_text_chars, "Remaining: %d", game.getRemaining());
 
-		mines_remaining_text.loadFontTexture(PEACH, mines_remaining_text_chars);
-		window.render(mines_remaining_text);
+			mines_remaining_text.loadFontTexture(PEACH, mines_remaining_text_chars);
+			window.render(mines_remaining_text);
 
-		int time_elapsed;
-		if (!game.getWin()) {
-			time_elapsed = (current_time - start_time) / 1000;
-		}
-		if (time_elapsed < 999) {
-			sprintf_s(timer_text_chars, "Time: %03d", time_elapsed);
+			int time_elapsed;
+			if (!game.getWin()) {
+				time_elapsed = (current_time - start_time) / 1000;
+			} else {
+				entering_highscore = true;
+			}
+			if (time_elapsed < 999) {
+				sprintf_s(timer_text_chars, "Time: %03d", time_elapsed);
+			} else {
+				sprintf_s(timer_text_chars, "Time: 999");
+			}
+			timer_text.loadFontTexture(ORANGE_RED, timer_text_chars);
+			window.render(timer_text);
+			game.renderBoard();
 		} else {
-			sprintf_s(timer_text_chars, "Time: 999");
+			new_highscore_text.loadFontTexture(WHITE, "New highscore! Enter name below (max 20)");
+			window.render(new_highscore_text);
+			window.render(name_text);
 		}
-		timer_text.loadFontTexture(ORANGE_RED, timer_text_chars);
-		window.render(timer_text);
-		game.renderBoard();
 		window.display();
 		window.clear(COLOR_VECTOR[current_bg_color], 0xFF);
 		window.showWindow();
