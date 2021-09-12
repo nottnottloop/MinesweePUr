@@ -32,6 +32,7 @@ Uint32 current_time;
 
 bool entering_highscore = false;
 bool highscore_entered = false;
+bool highscore_tracking = true;
 std::string name_string;
 int time_elapsed = 0;
 
@@ -40,6 +41,7 @@ SDL_Texture* bg = window.loadTexture("res/bg.png");
 SDL_Texture* fg = window.loadTexture("res/fg.png");
 SDL_Texture* awesome = window.loadTexture("res/awesome.png");
 SDL_Texture* vol = window.loadTexture("res/vol.png");
+SDL_Texture* leaderboard_img = window.loadTexture("res/leaderboard.png");
 
 Text text({650, 40}, {0, 0}, 75);
 Text mines_remaining_text({10, 75}, {0, 0}, 62);
@@ -138,18 +140,70 @@ void initHighScore(bool force = false) {
 	ifile.close();
 }
 
-void loadHighScore() {
+int loadHighScore(bool messagebox) {
 	std::ifstream file("highscore.bin");
 	Score score_array[3][5];
 	file.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
 	char score_chars[300] = {};
+	int worst_score = score_array[current_level][0].score;
 	for (int i = 0; i < 5; ++i) {
+		if (worst_score < score_array[current_level][i].score) {
+			worst_score = score_array[current_level][i].score;
+		}
 		char temp[40];
 		sprintf_s(temp, "%d. %s, %d\n", i + 1, score_array[current_level][i].name, score_array[current_level][i].score);
 		strcat_s(score_chars, temp);
 	}
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Highscores!", score_chars, nullptr);
+	if (messagebox) {
+		const SDL_MessageBoxButtonData message_box_buttons[] = {
+			//{ /* .flags, .buttonid, .text */        0, 0, "no" },
+			//{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 1, "yes" },
+			//{ SDL_MESSAGEBOX_BUTTON_ESCAPEKEY_DEFAULT, 2, "cancel" },
+			{ SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "OK" },
+			{ /* .flags, .buttonid, .text */        0, 1, "Highscores on" },
+			{ /* .flags, .buttonid, .text */        0, 2, "Highscores off" },
+		};
+
+    SDL_MessageBoxColorScheme colorScheme = {
+        { /* .colors (.r, .g, .b) */
+            /* [SDL_MESSAGEBOX_COLOR_BACKGROUND] */
+            { 255,   0,   0 },
+            /* [SDL_MESSAGEBOX_COLOR_TEXT] */
+            {   0, 255,   0 },
+            /* [SDL_MESSAGEBOX_COLOR_BUTTON_BORDER] */
+            { 255, 255,   0 },
+            /* [SDL_MESSAGEBOX_COLOR_BUTTON_BACKGROUND] */
+            {   0,   0, 255 },
+            /* [SDL_MESSAGEBOX_COLOR_BUTTON_SELECTED] */
+            { 255,   0, 255 }
+        }
+    };
+
+		SDL_MessageBoxData message_box_data = {
+				SDL_MESSAGEBOX_INFORMATION, /* .flags */
+				nullptr, /* .window */
+				"Highscores!", /* .title */
+				score_chars, /* .message */
+				SDL_arraysize(message_box_buttons), /* .numbuttons */
+				message_box_buttons, /* .buttons */
+				&colorScheme /* .colorScheme */
+		};
+
+		int button_id;
+    if (SDL_ShowMessageBox(&message_box_data, &button_id) < 0) {
+			printf("error displaying message box");
+    }
+    if (button_id == -1) {
+			printf("no selection");
+    } else if (button_id == 1) {
+			highscore_tracking = true;
+    } else if (button_id == 2) {
+			highscore_tracking = false;
+    }
+		//SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Highscores!", score_chars, nullptr);
+	}
 	file.close();
+	return worst_score;
 }
 
 void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, Text& timer_text, Button& restart_button) {
@@ -218,18 +272,20 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 					//it's like i went to Italy and had an extra large serving
 					if (i == 0) {
 						switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
-					}
-					if (i < 5 && i > 1) {
+					} else if (i < 5 && i > 1) {
 						switchLevel(i, game, text, mines_remaining_text, timer_text, restart_button);
+					} else if (i == 5) {
+						loadHighScore(true);
 					}
 				} else {
 					buttons[i]->leftClick();
 					//it's like i went to Italy and had an extra large serving
 					if (i == 0) {
 						switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
-					}
-					if (i < 5 && i > 1) {
+					} else if (i < 5 && i > 1) {
 						switchLevel(i, game, text, mines_remaining_text, timer_text, restart_button);
+					} else if (i == 5) {
+						loadHighScore(true);
 					}
 				}
 			}
@@ -277,6 +333,10 @@ int main(int argc, char* argv[]) {
 
 	Button threeBut({120, 0}, {0, 0}, {0, 0, 60, 60}, {120, 0, 60, 60}, bg, fg, game, nullptr);
 	buttons.push_back(&threeBut);
+
+	Button leaderboards({0, SCREEN_HEIGHT - 196.0f / 2}, {0, 0}, {0, 0, 348, 196}, {0, 0, 348, 196}, nullptr, leaderboard_img, game, nullptr);
+	leaderboards.setScale(0.5f);
+	buttons.push_back(&leaderboards);
 
 	click = Mix_LoadWAV("res/click.ogg");
 	kaboom = Mix_LoadWAV("res/kaboom.ogg");
@@ -358,7 +418,7 @@ int main(int argc, char* argv[]) {
 								}
 								break;
 							case SDLK_h:
-								loadHighScore();
+								loadHighScore(true);
 								break;
 							case SDLK_5:
 								initHighScore(true);
@@ -409,7 +469,7 @@ int main(int argc, char* argv[]) {
 
 			if (!game.getWin()) {
 				time_elapsed = (current_time - start_time) / 1000;
-			} else if (!highscore_entered) {
+			} else if (!highscore_entered && loadHighScore(false) > time_elapsed && highscore_tracking) {
 				entering_highscore = true;
 				SDL_StartTextInput();
 			}
