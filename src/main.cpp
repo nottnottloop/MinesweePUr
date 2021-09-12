@@ -479,7 +479,6 @@ int main(int argc, char* argv[]) {
 				sprintf_s(timer_text_chars, "Time: 999");
 			}
 			timer_text.loadFontTexture(ORANGE_RED, timer_text_chars);
-			window.render(timer_text);
 			game.renderBoard();
 		} else {
 			new_highscore_text.loadFontTexture(WHITE, "New highscore! Enter name below (max 20)");
@@ -487,6 +486,12 @@ int main(int argc, char* argv[]) {
 			name_text.loadFontTexture(WHITE, name_string.c_str());
 			window.render(name_text);
 		}
+		if (entering_highscore) {
+			timer_text.setPos({SCREEN_WIDTH / 2.0f - 135, 100});
+		} else {
+			timer_text.setPos({195, 3});
+		}
+		window.render(timer_text);
 		window.display();
 		window.clear(COLOR_VECTOR[current_bg_color], 0xFF);
 		window.showWindow();

@@ -12,6 +12,10 @@ Vector2f Entity::getPos() const {
 	return pos_ + offset_;
 }
 
+void Entity::setPos(Vector2f pos) {
+	pos_ = pos;
+}
+
 Vector2f Entity::getOffset() const {
 	return offset_;
 }

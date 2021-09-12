@@ -9,6 +9,7 @@ class Entity {
 public:
 	Entity(Vector2f pos, Vector2f offset, SDL_Rect bg_frame, SDL_Rect fg_frame, SDL_Texture* bg, SDL_Texture* fg);
 	Vector2f getPos() const;
+	void setPos(Vector2f pos);
 	Vector2f getOffset() const;
   void setOffset(Vector2f offset);
 
