@@ -6,6 +6,7 @@
 #include <fstream>
 #include <vector>
 #include <array>
+#include <ctype.h>
 
 #include "RenderWindow.hpp"
 #include "Entity.hpp"
@@ -30,6 +31,7 @@ Uint32 start_time;
 Uint32 current_time;
 
 bool entering_highscore = false;
+std::string name_string;
 
 RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 SDL_Texture* bg = window.loadTexture("res/bg.png");
@@ -47,7 +49,6 @@ char timer_text_chars[30] = {};
 
 Text new_highscore_text({120, 10}, {0, 0}, 40);
 Text name_text({SCREEN_WIDTH / 2.0f, 50}, {0, 0}, 40);
-char name_text_chars[21] = {};
 
 Mix_Chunk* click;
 Mix_Chunk* kaboom;
@@ -207,6 +208,7 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 
 int main(int argc, char* argv[]) {
 	initHighScore();
+	SDL_StopTextInput();
 	if (SDL_Init(SDL_INIT_VIDEO) > 0)
 		std::cout << "SDL_Init has failed. sdl_error: " << SDL_GetError() << "\n";
 
@@ -288,28 +290,48 @@ int main(int argc, char* argv[]) {
 					}
 				break;
 				case SDL_KEYDOWN:
-					switch (event.key.keysym.sym) {
-						case SDLK_r:
-							switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
-							break;
-						case SDLK_c:
-							if (current_bg_color < COLOR_VECTOR.size() - 1) {
-								++current_bg_color;
-							} else {
-								current_bg_color = 0;
-							}
-							break;
-						case SDLK_1:
-							switchLevel(1, game, text, mines_remaining_text, timer_text, restart_button);
-							break;
-						case SDLK_2:
-							switchLevel(2, game, text, mines_remaining_text, timer_text, restart_button);
-							break;
-						case SDLK_3:
-							switchLevel(3, game, text, mines_remaining_text, timer_text, restart_button);
-							break;
+				case SDL_TEXTINPUT:
+					if (entering_highscore) {
+							system("cls");
+							if (event.key.keysym.sym == SDLK_BACKSPACE && !name_string.empty())  {
+								name_string = name_string.substr(0, name_string.length() - 1);
+								std::cout << name_string << "\n";
+							} else if (event.key.keysym.sym == SDLK_RETURN && !name_string.empty()) {
+									SDL_StopTextInput();
+									std::cout << name_string << "\n";
+								} else if (name_string.length() < 20) {
+								if (name_string.length() < 20) {
+									if (isalnum(event.text.text[0])) {
+										name_string += event.text.text;
+									}
+									std::cout << name_string << "\n";
+								}
+						} 
 					}
-			}
+					if (!entering_highscore) {
+						switch (event.key.keysym.sym) {
+							case SDLK_r:
+								switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
+								break;
+							case SDLK_c:
+								if (current_bg_color < COLOR_VECTOR.size() - 1) {
+									++current_bg_color;
+								} else {
+									current_bg_color = 0;
+								}
+								break;
+							case SDLK_1:
+								switchLevel(1, game, text, mines_remaining_text, timer_text, restart_button);
+								break;
+							case SDLK_2:
+								switchLevel(2, game, text, mines_remaining_text, timer_text, restart_button);
+								break;
+							case SDLK_3:
+								switchLevel(3, game, text, mines_remaining_text, timer_text, restart_button);
+								break;
+						}
+					}
+		}
 		}
 		if (!entering_highscore) {
 			//get time for time elapsed in game
@@ -338,6 +360,7 @@ int main(int argc, char* argv[]) {
 				time_elapsed = (current_time - start_time) / 1000;
 			} else {
 				entering_highscore = true;
+				SDL_StartTextInput();
 			}
 			if (time_elapsed < 999) {
 				sprintf_s(timer_text_chars, "Time: %03d", time_elapsed);
