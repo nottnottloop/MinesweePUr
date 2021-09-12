@@ -25,7 +25,7 @@ int SCREEN_WIDTH = 1024;
 int SCREEN_HEIGHT = 768;
 
 //DEBUG
-//#define DEBUG_MINES 77 
+//#define DEBUG_MINES 1 
 //#define DEBUG_LEADERBOARD
 
 Uint32 start_time;
@@ -53,7 +53,7 @@ Text timer_text({195, 3}, {0, 0}, 55);
 //Time: 000
 char timer_text_chars[30] = {};
 
-Text new_highscore_text({120, 10}, {0, 0}, 40);
+Text new_highscore_text({190, 10}, {0, 0}, 40);
 Text name_text({SCREEN_WIDTH / 2.0f, (SCREEN_HEIGHT / 2.0f) - 40}, {0, 0}, 100);
 
 Mix_Chunk* click;
@@ -402,7 +402,7 @@ int main(int argc, char* argv[]) {
 							if (event.key.keysym.sym == SDLK_BACKSPACE && !name_string.empty())  {
 								name_string = name_string.substr(0, name_string.length() - 1);
 								name_text.setOffset({name_text.getOffset().x + 25, 0});
-								//std::cout << name_string << "\n";
+								std::cout << name_string << "\n";
 							} else if (event.key.keysym.sym == SDLK_RETURN && !name_string.empty()) {
 									SDL_StopTextInput();
 									entering_highscore = false;
@@ -416,7 +416,7 @@ int main(int argc, char* argv[]) {
 										name_text.setOffset({name_text.getOffset().x - 25, 0});
 										name_string += event.text.text;
 									}
-									//std::cout << name_string << "\n";
+									std::cout << name_string << "\n";
 						} 
 					}
 					if (!entering_highscore) {
@@ -507,7 +507,7 @@ int main(int argc, char* argv[]) {
 			timer_text.loadFontTexture(ORANGE_RED, timer_text_chars);
 			game.renderBoard();
 		} else {
-			new_highscore_text.loadFontTexture(WHITE, "New highscore! Enter name below (max 20)");
+			new_highscore_text.loadFontTexture(WHITE, "New highscore! Enter name below:");
 			window.render(new_highscore_text);
 			name_text.loadFontTexture(WHITE, name_string.c_str());
 			window.render(name_text);
