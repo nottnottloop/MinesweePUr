@@ -15,6 +15,7 @@ The code is spaghetti, just like my Factorio bases ;)
 
 - 1, 2 and 3 to switch levels
 - R to restart
+- H for scoreboard
 - C to change colors
 
 Alternatively you can do this by clicking on things, including a Windows XP Minesweeper inspired face to restart
