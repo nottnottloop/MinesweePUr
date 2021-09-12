@@ -334,7 +334,8 @@ int main(int argc, char* argv[]) {
 									char buffer[21];
 									strcpy_s(buffer, name_string.c_str());
 									addHighScore(buffer, time_elapsed);
-									name_string.empty();
+									name_string.clear();
+									name_text.setOffset({0, 0});
 								} else if (name_string.length() < 20) {
 								if (name_string.length() < 20) {
 									//we do this hack because i feel like switch case statements for
@@ -342,7 +343,7 @@ int main(int argc, char* argv[]) {
 									//and for some reason the event.text.text will come with a garbage value
 									//as well as an actual value every time without this hack
 									//:(
-									if (isalnum(event.text.text[0])) {
+									if (isalnum(event.text.text[0]) || isspace(event.text.text[0])) {
 										name_text.setOffset({name_text.getOffset().x - 25, 0});
 										name_string += event.text.text;
 									}
