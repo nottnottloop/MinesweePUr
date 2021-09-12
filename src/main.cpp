@@ -31,8 +31,6 @@ Uint32 start_time;
 Uint32 current_time;
 
 bool entering_highscore = false;
-int highscore_at_type = 0;
-int highscore_at_loop_enter = 0;
 std::string name_string;
 
 RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -69,7 +67,7 @@ void initHighScore() {
 	std::ifstream ifile("highscore.bin");
 	if (!ifile.is_open()) {
 		std::ofstream file("highscore.bin");
-		Score score_array[15];
+		Score score_array[5];
 		for (int i = 0; i < 5; ++i) {
 			strcpy_s(score_array[i].name, "Anonymous");
 			score_array[i].score = 999;
@@ -82,7 +80,7 @@ void initHighScore() {
 
 void loadHighScore() {
 	std::ifstream file("highscore.bin");
-	Score score_array[15];
+	Score score_array[5];
 	file.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
 	char score_chars[100] = {};
 	for (int i = 0; i < 5; ++i) {
@@ -372,7 +370,6 @@ int main(int argc, char* argv[]) {
 				time_elapsed = (current_time - start_time) / 1000;
 			} else {
 				entering_highscore = true;
-				highscore_at_loop_enter++;
 				SDL_StartTextInput();
 			}
 			if (time_elapsed < 999) {
