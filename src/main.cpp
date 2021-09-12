@@ -63,41 +63,12 @@ struct Score {
 	int score;
 };
 
-void initHighScore() {
-	std::ifstream ifile("highscore.bin");
-	if (!ifile.is_open()) {
-		std::ofstream file("highscore.bin");
-		Score score_array[5];
-		for (int i = 0; i < 5; ++i) {
-			strcpy_s(score_array[i].name, "Anonymous");
-			score_array[i].score = 999;
-		}
-		file.write(reinterpret_cast<char*>(&score_array), sizeof(score_array));
-		file.close();
-	}
-	ifile.close();
-}
-
-void loadHighScore() {
-	std::ifstream file("highscore.bin");
-	Score score_array[5];
-	file.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
-	char score_chars[100] = {};
-	for (int i = 0; i < 5; ++i) {
-		char temp[20];
-		sprintf_s(temp, "%d. %s, %d\n", i + 1, score_array[i].name, score_array[i].score);
-		strcat_s(score_chars, temp);
-	}
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Highscores", score_chars, nullptr);
-	file.close();
-}
-
 void addHighScore(char name[20], int val) {
 	std::ifstream ifile("highscore.bin");
-	Score score_array[5];
+	Score score_array[3][5];
 	ifile.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
 
-	Score new_score_array[5];
+	Score new_score_array[3][5];
 	memcpy_s(new_score_array, sizeof(new_score_array), score_array, sizeof(score_array));
 
 	ifile.close();
@@ -105,24 +76,74 @@ void addHighScore(char name[20], int val) {
 
 	bool inserted = false;
 	std::vector<Score> queue;
-	for (int i = 0; i < 5; ++i) {
-		if (val < score_array[i].score && !inserted) {
-			inserted = true;
-			Score temp;
-			strcpy_s(temp.name, name);
-			temp.score = val;
-			queue.push_back(temp);
+	for (int j = 0; j < 3; ++j) {
+		if (j == current_level) {
+			for (int i = 0; i < 5; ++i) {
+				if (val < score_array[current_level][i].score && !inserted) {
+					inserted = true;
+					Score old;
+					strcpy_s(old.name, score_array[current_level][i].name);
+					old.score = score_array[current_level][i].score;
+					Score new_score;
+					strcpy_s(new_score.name, name);
+					new_score.score = val;
+					queue.push_back(new_score);
+					queue.push_back(old);
+				} else if (inserted && i == 4) {
+					break;
+				} else {
+					queue.push_back(score_array[current_level][i]);
+				}
+			}
+		} else {
+			for (int i = 0; i < 5; ++i) {
+				queue.push_back(score_array[j][i]);
+			}
 		}
-		queue.push_back(score_array[i]);
 	}
 	
 	if (inserted) {
-		for (int i = 0; i < 5; ++i) {
-			strcpy_s(new_score_array[i].name, queue[i].name);
-			new_score_array[i].score = queue[i].score;
+		int iterate = 0;
+		for (int j = 0; j < 3; ++j) {
+			for (int i = 0; i < 5; ++i) {
+				strcpy_s(new_score_array[j][i].name, queue[iterate].name);
+				new_score_array[j][i].score = queue[iterate].score;
+				iterate++;
+			}
 		}
 		file.write(reinterpret_cast<char*>(&new_score_array), sizeof(new_score_array));
 	}
+	file.close();
+}
+
+void initHighScore(bool force = false) {
+	std::ifstream ifile("highscore.bin");
+	if (!ifile.is_open() || force) {
+		std::ofstream file("highscore.bin");
+		Score score_array[3][5];
+		for (int j = 0; j < 3; ++j) {
+			for (int i = 0; i < 5; ++i) {
+				strcpy_s(score_array[j][i].name, "Anonymous");
+				score_array[j][i].score = 999;
+			}
+		}
+	file.write(reinterpret_cast<char*>(&score_array), sizeof(score_array));
+	file.close();
+	}
+	ifile.close();
+}
+
+void loadHighScore() {
+	std::ifstream file("highscore.bin");
+	Score score_array[3][5];
+	file.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
+	char score_chars[100] = {};
+	for (int i = 0; i < 5; ++i) {
+		char temp[20];
+		sprintf_s(temp, "%d. %s, %d\n", i + 1, score_array[current_level][i].name, score_array[current_level][i].score);
+		strcat_s(score_chars, temp);
+	}
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Highscores", score_chars, nullptr);
 	file.close();
 }
 
@@ -329,6 +350,18 @@ int main(int argc, char* argv[]) {
 								break;
 							case SDLK_h:
 								loadHighScore();
+								break;
+							case SDLK_5:
+								initHighScore(true);
+								break;
+							case SDLK_7:
+								addHighScore("john", 3);
+								break;
+							case SDLK_8:
+								addHighScore("andrew", 5);
+								break;
+							case SDLK_9:
+								addHighScore("frankie", 22);
 								break;
 							case SDLK_1:
 								switchLevel(0, game, text, mines_remaining_text, timer_text, restart_button);
