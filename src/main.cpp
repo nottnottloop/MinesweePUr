@@ -76,7 +76,7 @@ void addHighScore(char name[30], int val) {
 	ifile.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
 
 	Score new_score_array[3][5];
-	memcpy_s(new_score_array, sizeof(new_score_array), score_array, sizeof(score_array));
+	memcpy(new_score_array, score_array, sizeof(score_array));
 
 	ifile.close();
 	std::ofstream file("highscore.bin", std::ios::out | std::ios::trunc);
@@ -89,10 +89,10 @@ void addHighScore(char name[30], int val) {
 				if (val < score_array[current_level][i].score && !inserted) {
 					inserted = true;
 					Score old;
-					strcpy_s(old.name, score_array[current_level][i].name);
+					strcpy(old.name, score_array[current_level][i].name);
 					old.score = score_array[current_level][i].score;
 					Score new_score;
-					strcpy_s(new_score.name, name);
+					strcpy(new_score.name, name);
 					new_score.score = val;
 					queue.push_back(new_score);
 					if (i != 4) {
@@ -115,7 +115,7 @@ void addHighScore(char name[30], int val) {
 		int iterate = 0;
 		for (int j = 0; j < 3; ++j) {
 			for (int i = 0; i < 5; ++i) {
-				strcpy_s(new_score_array[j][i].name, queue[iterate].name);
+				strcpy(new_score_array[j][i].name, queue[iterate].name);
 				new_score_array[j][i].score = queue[iterate].score;
 				iterate++;
 			}
@@ -133,7 +133,7 @@ void initHighScore(bool force = false) {
 		Score score_array[3][5];
 		for (int j = 0; j < 3; ++j) {
 			for (int i = 0; i < 5; ++i) {
-				strcpy_s(score_array[j][i].name, "Anonymous");
+				strcpy(score_array[j][i].name, "Anonymous");
 				score_array[j][i].score = 999;
 			}
 		}
@@ -155,7 +155,7 @@ int loadHighScore(bool messagebox) {
 		}
 		char temp[40];
 		sprintf_s(temp, "%d. %s, %d\n", i + 1, score_array[current_level][i].name, score_array[current_level][i].score);
-		strcat_s(score_chars, temp);
+		strcat(score_chars, temp);
 	}
 	if (messagebox) {
 		const SDL_MessageBoxButtonData message_box_buttons[] = {
@@ -185,16 +185,16 @@ int loadHighScore(bool messagebox) {
 		char title_buffer[30] = {};
 		switch (current_level) {
 			case 0:
-				strcat_s(title_buffer, "Beginner");
+				strcat(title_buffer, "Beginner");
 				break;
 			case 1:
-				strcat_s(title_buffer, "Medium");
+				strcat(title_buffer, "Medium");
 				break;
 			case 2:
-				strcat_s(title_buffer, "Expert");
+				strcat(title_buffer, "Expert");
 				break;
 		}
-		strcat_s(title_buffer, " Highscores!");
+		strcat(title_buffer, " Highscores!");
 
 		SDL_MessageBoxData message_box_data = {
 				SDL_MESSAGEBOX_INFORMATION, /* .flags */
@@ -422,7 +422,7 @@ int main(int argc, char* argv[]) {
 									SDL_StopTextInput();
 									entering_highscore = false;
 									char buffer[30];
-									strcpy_s(buffer, name_string.c_str());
+									strcpy(buffer, name_string.c_str());
 									addHighScore(buffer, time_elapsed);
 									name_string.clear();
 									name_text.setOffset({0, 0});

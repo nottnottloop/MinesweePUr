@@ -51,7 +51,8 @@ void RenderWindow::clear(SDL_Color color, int a) {
 }
 
 void RenderWindow::render(Text text) const {
-	SDL_RenderCopy(renderer_, text.getFgTex(), nullptr, &text.renderTextInfo());
+	SDL_Rect text_rect = text.renderTextInfo();
+	SDL_RenderCopy(renderer_, text.getFgTex(), nullptr, &text_rect);
 }
 
 void RenderWindow::render(std::tuple<SDL_Rect, SDL_Rect> rects, SDL_Texture* tex) const {

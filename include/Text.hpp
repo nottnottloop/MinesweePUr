@@ -8,8 +8,8 @@ public:
 	Text(Vector2f pos, Vector2f offset, int size);
 	void loadFontTexture(SDL_Color color, const char* text);
 	void openFont(const char* file_path, int size);
-	SDL_Rect Text::renderTextInfo();
-	SDL_Rect Text::renderCenteredTextInfo();
+	SDL_Rect renderTextInfo();
+	SDL_Rect renderCenteredTextInfo();
 	void setSize(int size);
 	int getSize();
 private:
