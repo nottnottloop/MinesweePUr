@@ -25,7 +25,7 @@ int SCREEN_WIDTH = 1024;
 int SCREEN_HEIGHT = 768;
 
 //DEBUG
-#define DEBUG_MINES 1
+#define DEBUG_MINES 77 
 
 Uint32 start_time;
 Uint32 current_time;
@@ -40,6 +40,7 @@ RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 SDL_Texture* bg = window.loadTexture("res/bg.png");
 SDL_Texture* fg = window.loadTexture("res/fg.png");
 SDL_Texture* awesome = window.loadTexture("res/awesome.png");
+SDL_Texture* demoawesome = window.loadTexture("res/demoawesome.png");
 SDL_Texture* vol = window.loadTexture("res/vol.png");
 SDL_Texture* leaderboard_img = window.loadTexture("res/leaderboard.png");
 
@@ -206,6 +207,17 @@ int loadHighScore(bool messagebox) {
 	return worst_score;
 }
 
+void restartButtonOffset(int level, Button& restart_button) {
+	switch (level) {
+		case 0:
+			restart_button.setOffset({0, 15});
+			break;
+		case 1:
+		case 2:
+			restart_button.setOffset({0, 5});
+			break;
+	}
+}
 void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, Text& timer_text, Button& restart_button) {
 	start_time = SDL_GetTicks();
 	switch (level) {
@@ -220,7 +232,7 @@ void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, 
 			#else
 				game.setBoard(9, 9, 10);
 			#endif
-			restart_button.setOffset({0, 15});
+			restartButtonOffset(level, restart_button);
 			game.setCellScale(1.0f);
 			game.setOffset({-30, 20});
 			game.initBoard();
@@ -237,7 +249,7 @@ void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, 
 			#else
 				game.setBoard(16, 16, 40);
 			#endif
-			restart_button.setOffset({0, 5});
+			restartButtonOffset(level, restart_button);
 			game.setCellScale(0.6f);
 			game.setOffset({0, 60});
 			game.initBoard();
@@ -254,7 +266,7 @@ void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, 
 			#else
 				game.setBoard(16, 30, 99);
 			#endif
-			restart_button.setOffset({0, 5});
+			restartButtonOffset(level, restart_button);
 			game.setCellScale(0.5f);
 			game.setOffset({0, 20});
 			game.initBoard();
@@ -273,6 +285,7 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 					if (i == 0) {
 						switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
 					} else if (i < 5 && i > 1) {
+						game.restart();
 						switchLevel(i, game, text, mines_remaining_text, timer_text, restart_button);
 					} else if (i == 5) {
 						loadHighScore(true);
@@ -283,6 +296,7 @@ void checkButtonClick(Sint32 x, Sint32 y, bool right_mouse, Game& game, Text& te
 					if (i == 0) {
 						switchLevel(current_level, game, text, mines_remaining_text, timer_text, restart_button);
 					} else if (i < 5 && i > 1) {
+						game.restart();
 						switchLevel(i, game, text, mines_remaining_text, timer_text, restart_button);
 					} else if (i == 5) {
 						loadHighScore(true);
@@ -452,6 +466,16 @@ int main(int argc, char* argv[]) {
 			//begin render loop
 			for (int i = 0; i < buttons.size(); ++i) {
 				//this isn't great, but we live and learn
+				if (i == 0 && game.getLose()) {
+					buttons[0]->setFgTex(demoawesome);
+					restart_button.setScale(0.15);
+					restartButtonOffset(current_level, restart_button);
+					restart_button.offset_ = restart_button.offset_ + Vector2f{-14, -22};
+				} else {
+					buttons[0]->setFgTex(awesome);
+					restart_button.setScale(0.125f);
+					restartButtonOffset(current_level, restart_button);
+				}
 				if (i == 1 && game.getMute()) {
 					buttons[i]->setFgFrame({128, 0, 128, 128});
 				} else if (i == 1) {

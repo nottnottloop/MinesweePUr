@@ -276,6 +276,10 @@ bool Game::getWin() {
 	return won_;
 }
 
+bool Game::getLose() {
+	return lost_;
+}
+
 //void Game::setWin(bool win) {
 //	won_ = win;
 //}
