@@ -61,11 +61,11 @@ int current_level = 0;
 int current_bg_color = 0;
 
 struct Score {
-	char name[20];
+	char name[21];
 	int score;
 };
 
-void addHighScore(char name[20], int val) {
+void addHighScore(char name[30], int val) {
 	std::ifstream ifile("highscore.bin");
 	Score score_array[3][5];
 	ifile.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
@@ -142,9 +142,9 @@ void loadHighScore() {
 	std::ifstream file("highscore.bin");
 	Score score_array[3][5];
 	file.read(reinterpret_cast<char*>(&score_array), sizeof(score_array));
-	char score_chars[100] = {};
+	char score_chars[300] = {};
 	for (int i = 0; i < 5; ++i) {
-		char temp[20];
+		char temp[40];
 		sprintf_s(temp, "%d. %s, %d\n", i + 1, score_array[current_level][i].name, score_array[current_level][i].score);
 		strcat_s(score_chars, temp);
 	}
@@ -327,28 +327,22 @@ int main(int argc, char* argv[]) {
 							system("cls");
 							if (event.key.keysym.sym == SDLK_BACKSPACE && !name_string.empty())  {
 								name_string = name_string.substr(0, name_string.length() - 1);
+								name_text.setOffset({name_text.getOffset().x + 25, 0});
 								std::cout << name_string << "\n";
 							} else if (event.key.keysym.sym == SDLK_RETURN && !name_string.empty()) {
 									SDL_StopTextInput();
 									entering_highscore = false;
-									char buffer[21];
+									char buffer[30];
 									strcpy_s(buffer, name_string.c_str());
 									addHighScore(buffer, time_elapsed);
 									name_string.clear();
 									name_text.setOffset({0, 0});
-								} else if (name_string.length() < 20) {
-								if (name_string.length() < 20) {
-									//we do this hack because i feel like switch case statements for
-									//sdl were a mistake. i can't properly take in two events at the same time
-									//and for some reason the event.text.text will come with a garbage value
-									//as well as an actual value every time without this hack
-									//:(
+								} else if (name_string.length() < 20 && !event.key.repeat) {
 									if (isalnum(event.text.text[0]) || isspace(event.text.text[0])) {
 										name_text.setOffset({name_text.getOffset().x - 25, 0});
 										name_string += event.text.text;
 									}
 									std::cout << name_string << "\n";
-								}
 						} 
 					}
 					if (!entering_highscore) {
