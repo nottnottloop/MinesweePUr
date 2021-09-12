@@ -25,7 +25,7 @@ int SCREEN_WIDTH = 1024;
 int SCREEN_HEIGHT = 768;
 
 //DEBUG
-#define DEBUG_MINES 1 
+//#define DEBUG_MINES 1 
 //#define DEBUG_LEADERBOARD
 
 Uint32 start_time;
@@ -473,7 +473,7 @@ int main(int argc, char* argv[]) {
 					buttons[0]->setFgTex(demoawesome);
 					restart_button.setScale(0.15);
 					restartButtonOffset(current_level, restart_button);
-					restart_button.offset_ = restart_button.offset_ + Vector2f{-14, -22};
+					restart_button.offset_ = restart_button.offset_ + Vector2f{-14, -26};
 				} else if (i == 0 && game.getWin()) {
 					buttons[0]->setFgTex(sunglassesawesome);
 					restart_button.setScale(0.125f);
