@@ -399,11 +399,10 @@ int main(int argc, char* argv[]) {
 				case SDL_KEYDOWN:
 				case SDL_TEXTINPUT:
 					if (entering_highscore) {
-							system("cls");
 							if (event.key.keysym.sym == SDLK_BACKSPACE && !name_string.empty())  {
 								name_string = name_string.substr(0, name_string.length() - 1);
 								name_text.setOffset({name_text.getOffset().x + 25, 0});
-								std::cout << name_string << "\n";
+								//std::cout << name_string << "\n";
 							} else if (event.key.keysym.sym == SDLK_RETURN && !name_string.empty()) {
 									SDL_StopTextInput();
 									entering_highscore = false;
@@ -417,7 +416,7 @@ int main(int argc, char* argv[]) {
 										name_text.setOffset({name_text.getOffset().x - 25, 0});
 										name_string += event.text.text;
 									}
-									std::cout << name_string << "\n";
+									//std::cout << name_string << "\n";
 						} 
 					}
 					if (!entering_highscore) {
