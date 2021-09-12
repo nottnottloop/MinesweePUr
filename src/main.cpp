@@ -88,7 +88,9 @@ void addHighScore(char name[20], int val) {
 					strcpy_s(new_score.name, name);
 					new_score.score = val;
 					queue.push_back(new_score);
-					queue.push_back(old);
+					if (i != 4) {
+						queue.push_back(old);
+					}
 				} else if (inserted && i == 4) {
 					break;
 				} else {
@@ -111,8 +113,8 @@ void addHighScore(char name[20], int val) {
 				iterate++;
 			}
 		}
-		file.write(reinterpret_cast<char*>(&new_score_array), sizeof(new_score_array));
 	}
+	file.write(reinterpret_cast<char*>(&new_score_array), sizeof(new_score_array));
 	file.close();
 }
 
@@ -143,7 +145,7 @@ void loadHighScore() {
 		sprintf_s(temp, "%d. %s, %d\n", i + 1, score_array[current_level][i].name, score_array[current_level][i].score);
 		strcat_s(score_chars, temp);
 	}
-	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Highscores", score_chars, nullptr);
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "Highscores!", score_chars, nullptr);
 	file.close();
 }
 
@@ -151,6 +153,7 @@ void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, 
 	start_time = SDL_GetTicks();
 	switch (level) {
 		case 0:
+			current_level = 0;
 			text.loadFontTexture(GREEN, "Beginner");
 			text.setOffset({0, 0});
 			game.clearBoard();
@@ -166,6 +169,7 @@ void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, 
 			game.generateBoard();
 			break;
 		case 1:
+			current_level = 1;
 			text.loadFontTexture(CYAN, "Medium");
 			text.setOffset({0, -10});
 			game.clearBoard();
@@ -181,6 +185,7 @@ void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, 
 			game.generateBoard();
 			break;
 		case 2:
+			current_level = 2;
 			text.loadFontTexture(RED, "Expert");
 			text.setOffset({0, -10});
 			game.clearBoard();
