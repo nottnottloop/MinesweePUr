@@ -31,7 +31,9 @@ Uint32 start_time;
 Uint32 current_time;
 
 bool entering_highscore = false;
+bool highscore_entered = false;
 std::string name_string;
+int time_elapsed = 0;
 
 RenderWindow window = RenderWindow("MinesweePUr", SCREEN_WIDTH, SCREEN_HEIGHT);
 SDL_Texture* bg = window.loadTexture("res/bg.png");
@@ -116,6 +118,7 @@ void addHighScore(char name[20], int val) {
 	}
 	file.write(reinterpret_cast<char*>(&new_score_array), sizeof(new_score_array));
 	file.close();
+	highscore_entered = true;
 }
 
 void initHighScore(bool force = false) {
@@ -154,6 +157,7 @@ void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, 
 	switch (level) {
 		case 0:
 			current_level = 0;
+			highscore_entered = false;
 			text.loadFontTexture(GREEN, "Beginner");
 			text.setOffset({0, 0});
 			game.clearBoard();
@@ -170,6 +174,7 @@ void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, 
 			break;
 		case 1:
 			current_level = 1;
+			highscore_entered = false;
 			text.loadFontTexture(CYAN, "Medium");
 			text.setOffset({0, -10});
 			game.clearBoard();
@@ -186,6 +191,7 @@ void switchLevel(int level, Game& game, Text& text, Text& mines_remaining_text, 
 			break;
 		case 2:
 			current_level = 2;
+			highscore_entered = false;
 			text.loadFontTexture(RED, "Expert");
 			text.setOffset({0, -10});
 			game.clearBoard();
@@ -325,7 +331,10 @@ int main(int argc, char* argv[]) {
 							} else if (event.key.keysym.sym == SDLK_RETURN && !name_string.empty()) {
 									SDL_StopTextInput();
 									entering_highscore = false;
-									std::cout << name_string << "\n";
+									char buffer[21];
+									strcpy_s(buffer, name_string.c_str());
+									addHighScore(buffer, time_elapsed);
+									name_string.empty();
 								} else if (name_string.length() < 20) {
 								if (name_string.length() < 20) {
 									//we do this hack because i feel like switch case statements for
@@ -403,10 +412,9 @@ int main(int argc, char* argv[]) {
 			mines_remaining_text.loadFontTexture(PEACH, mines_remaining_text_chars);
 			window.render(mines_remaining_text);
 
-			int time_elapsed;
 			if (!game.getWin()) {
 				time_elapsed = (current_time - start_time) / 1000;
-			} else {
+			} else if (!highscore_entered) {
 				entering_highscore = true;
 				SDL_StartTextInput();
 			}
