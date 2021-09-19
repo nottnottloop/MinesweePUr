@@ -13,9 +13,10 @@ set (SOURCES
 	src/text.cpp
 )
 
-#add_executable (MinesweePUr ${SOURCES})
-add_executable (MinesweePUr WIN32 ${SOURCES})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic")
+add_executable (MinesweePUr ${SOURCES})
+#add_executable (MinesweePUr WIN32 ${SOURCES})
+set(CMAKE_USE_PTHREADS_INIT  TRUE)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ --whole-file -lwinpthread -Wl,-Bdynamic --no-whole-file")
 
 target_include_directories (MinesweePUr PUBLIC
 	#C:/dev/Libraries/SDL2-2.0.16vc/include/SDL2
