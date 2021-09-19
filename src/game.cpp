@@ -295,6 +295,7 @@ void Game::win() {
 			if (!cells_[i][j].clicked()) {
 				cells_[i][j].setCellValue(fg_value::FLAG);
 			}
+			cells_[i][j].setUnclickable();
 		}
 	}
 }
@@ -306,7 +307,7 @@ void Game::checkCellClick(Sint32 x, Sint32 y, bool right_mouse) {
 				if (cells_[row][col].getPos().y < y && cells_[row][col].getPos().y + 60.0f * cell_scale > y) {
 					if (right_mouse && cells_[row][col].getClickable()) {
 						cells_[row][col].rightClick();
-					} else if (!cells_[row][col].fgShown() && cells_[row][col].getClickable() && !getWin()) {
+					} else if (!cells_[row][col].fgShown() && cells_[row][col].getClickable()) {
 						if (!muted_) {
 							Mix_PlayChannel(-1, click, 0);
 						}
