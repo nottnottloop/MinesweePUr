@@ -25,7 +25,7 @@ int SCREEN_WIDTH = 1024;
 int SCREEN_HEIGHT = 768;
 
 //DEBUG
-//#define DEBUG_MINES 1 
+//#define DEBUG_MINES 2 
 //#define DEBUG_LEADERBOARD
 
 Uint32 start_time;

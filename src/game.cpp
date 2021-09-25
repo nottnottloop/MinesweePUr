@@ -221,6 +221,9 @@ void Game::revealNeighbours(int row, int col) {
 }
 
 int Game::getRemaining() {
+	if (getWin()) {
+		return 0;
+	}
 	int mines = getMines();
 	for (int i = 0; i < getRows(); ++i) {
 		for (int j = 0; j < getCols(); ++j) {
