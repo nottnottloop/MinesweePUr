@@ -13,12 +13,12 @@ add_executable (MinesweePUr ${SOURCES})
 # add_executable (MinesweePUr+ WIN32 ${SOURCES})
 
 target_include_directories (MinesweePUr PUBLIC
-	C:/dev/Libraries/SDL2-2.0.16/include/SDL2
+	C:/dev/Libraries/SDL2-2.0.16vc/include/SDL2
 	include
 )
 
 target_link_directories (MinesweePUr PUBLIC
-	C:/dev/Libraries/SDL2-2.0.16/lib/x64
+	C:/dev/Libraries/SDL2-2.0.16vc/lib/x64
 )
 
 target_link_libraries(MinesweePUr SDL2main SDL2 SDL2_image)
