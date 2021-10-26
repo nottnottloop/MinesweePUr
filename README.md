@@ -9,8 +9,6 @@
 
 The PU originally was going to stand for powerups. Didn't really think powerups would be fun in the end. I might add a 'crazy mode' where the board moves erratically in the future.
 
-The code is spaghetti, just like my Factorio bases ;)
-
 **Controls:**
 
 - 1, 2 and 3 to switch levels
